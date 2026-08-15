@@ -884,6 +884,24 @@
       padding: var(--s-m) var(--s-l)
     }
 
+    .grid2.install-grid .card-inner {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      box-sizing: border-box;
+    }
+
+    .btn-dl {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 48px;
+      margin-top: var(--s-l);
+      white-space: nowrap;
+    }
+
     .card h4 {
       margin: 0 0 var(--s-s)
     }
@@ -1105,6 +1123,35 @@
       color: var(--muted-foreground)
     }
 
+    .app-tabs {
+      display: flex;
+      align-items: center;
+      gap: 4px
+    }
+
+    .app-tab {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      font-family: var(--font-mono);
+      color: var(--muted-foreground);
+      border: 1px solid transparent;
+      border-bottom: 2px solid transparent
+    }
+
+    .app-tab.on {
+      color: var(--foreground);
+      background: var(--bg-surface);
+      border-color: var(--border);
+      border-bottom-color: var(--primary)
+    }
+
+    .app-tab .dot {
+      color: var(--primary);
+      font-size: 8px
+    }
+
     .app .sp {
       flex: 1 1 auto
     }
@@ -1140,11 +1187,18 @@
 
     .app-vp {
       flex: 1 1 220px;
-      min-height: 150px;
+      min-height: 300px;
       position: relative;
       background:
         repeating-linear-gradient(0deg, transparent 0 23px, rgba(255, 255, 255, .035) 23px 24px),
         repeating-linear-gradient(90deg, transparent 0 23px, rgba(255, 255, 255, .035) 23px 24px)
+    }
+
+    .app-vp svg.dia {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%
     }
 
     .app-insp {
@@ -1757,7 +1811,6 @@
 
         <h4>Going further</h4>
         <a href="#examples">Eight worked examples</a>
-        <a href="#cli">The command line</a>
         <a href="#errors">When it goes wrong</a>
         <a href="#reference">Reference</a>
       </div>
@@ -1921,44 +1974,32 @@
           <p class="sub">One file, double-click, done. Python and the CAD kernel are inside the installer; there is
             nothing else to set up and nothing else to install.</p>
 
-          <div class="grid2">
-            <div class="card">
-              <div class="card-inner">
-                <h4>Linux · .deb</h4>
-                <p><code>Slipfit-0.5.0-linux-x64.deb</code> — about 152 MB. Built and tested on Ubuntu 24.04.</p>
-              </div>
-            </div>
+          <div class="grid2 install-grid">
             <div class="card">
               <div class="card-inner">
                 <h4>Windows · setup.exe</h4>
                 <p><code>Slipfit-0.5.0-windows-x64-setup.exe</code> — installs for you alone, no administrator prompt.
                 </p>
+                <a class="btn btn-primary btn-dl"
+                  href="https://github.com/CodeChomper/slipfit-releases/releases/download/v0.5.0/Slipfit-0.5.0-windows-x64-setup.exe">Download</a>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-inner">
+                <h4>Linux · .deb</h4>
+                <p><code>Slipfit-0.5.0-linux-x64.deb</code> — about 152 MB. Built and tested on Ubuntu 24.04.</p>
+                <a class="btn btn-primary btn-dl"
+                  href="https://github.com/CodeChomper/slipfit-releases/releases/download/v0.5.0/Slipfit-0.5.0-linux-x64.deb">Download</a>
               </div>
             </div>
             <div class="card warn">
               <div class="card-inner">
-                <h4>macOS · from source</h4>
-                <p>Not packaged yet. It runs perfectly well <a href="#from-source">from a clone</a>, which is the route
-                  below.</p>
+                <h4>macOS</h4>
+                <p>Not packaged yet — macOS support is coming in a future release.</p>
               </div>
             </div>
           </div>
 
-          <div class="note">
-            <span class="tag">Where the installers come from</span>
-            <p>There is no download server. The installers are built from the repository — one command per
-              platform, and the recipe is in <code>docs/packaging.md</code>:</p>
-            <pre class="term" data-name="~/slipfit" style="margin:12px 0 0"><code>packaging/build-linux.sh          # writes dist-installers/*.deb
-packaging\build-windows.bat       # writes dist-installers\*-setup.exe</code></pre>
-          </div>
-
-          <h3>Linux</h3>
-          <pre class="term" data-name="~/Downloads"><code>sudo apt install ./Slipfit-0.5.0-linux-x64.deb</code></pre>
-          <p>
-            Then launch <strong>Slipfit</strong> from your applications menu. Installing with
-            <code>apt</code> rather than <code>dpkg -i</code> is worth doing because it pulls in anything
-            missing instead of leaving the package half-configured.
-          </p>
           <p>
             The package sets up its own sandbox on install — a security wrapper that stops the app reaching
             parts of your machine it has no business in. You will not see it work; you would only have
@@ -1979,6 +2020,15 @@ packaging\build-windows.bat       # writes dist-installers\*-setup.exe</code></p
               through it for software you actually meant to install, from a place you actually trust.</p>
           </div>
 
+          <h3>Linux</h3>
+          <pre class="term" data-name="~/Downloads"><code>sudo apt install ./Slipfit-0.5.0-linux-x64.deb</code></pre>
+          <p>
+            Then launch <strong>Slipfit</strong> from your applications menu. Installing with
+            <code>apt</code> rather than <code>dpkg -i</code> is worth doing because it pulls in anything
+            missing instead of leaving the package half-configured.
+          </p>
+
+
           <h3>The first time you open it</h3>
           <p>Two folders appear, and it is worth knowing which is which, because they do different jobs:</p>
           <div class="tbl">
@@ -1986,23 +2036,23 @@ packaging\build-windows.bat       # writes dist-installers\*-setup.exe</code></p
               <thead>
                 <tr>
                   <th>Folder</th>
-                  <th>Linux</th>
                   <th>Windows</th>
+                  <th>Linux</th>
                   <th>Holds</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><strong>Your models</strong></td>
-                  <td class="num">~/Documents/Slipfit</td>
                   <td class="num">Documents\Slipfit</td>
+                  <td class="num">~/Documents/Slipfit</td>
                   <td>Your <code>.slip</code> files and the parts you export. Seeded once with a folder of examples to
                     open and pull apart.</td>
                 </tr>
                 <tr>
                   <td><strong>Your workshop</strong></td>
-                  <td class="num">~/.config/Slipfit</td>
                   <td class="num">%APPDATA%\Slipfit</td>
+                  <td class="num">~/.config/Slipfit</td>
                   <td>Your calibration: what your printer does to a hole, and which heat-set inserts you own.</td>
                 </tr>
               </tbody>
@@ -2013,65 +2063,6 @@ packaging\build-windows.bat       # writes dist-installers\*-setup.exe</code></p
             it has to follow you into every folder you model in. Keeping it with the models would mean a
             part opened from your Downloads folder quietly exported uncompensated — the right shape, the
             wrong size, and nothing on screen to say so.
-          </p>
-          <p>
-            The examples folder is copied out once and then left alone, so anything you change or delete in
-            it stays changed or deleted.
-          </p>
-
-          <div class="note">
-            <span class="tag">Already calibrated in a clone?</span>
-            <p>There is no automatic migration — a packaged app has no way of knowing which checkout you
-              measured in. Copy it across once:</p>
-            <pre class="term" data-name="~/slipfit" style="margin:12px 0 0"><code>mkdir -p ~/.config/Slipfit/.slipfit
-cp -r .slipfit/profiles .slipfit/hardware.json ~/.config/Slipfit/.slipfit/</code></pre>
-          </div>
-
-          <h3 id="from-source">Running from the source instead</h3>
-          <p>
-            This is the route for macOS, and the one to take if you want to change Slipfit itself. You need
-            <strong>Python 3.12 or newer</strong> and, for the window, <strong>Node.js 20+ with npm</strong>.
-          </p>
-          <pre class="term" data-name="~/slipfit"><code># the CAD kernel and the test tools
-python3 -m venv .venv
-.venv/bin/pip install -r requirements-dev.txt
-
-# the desktop shell
-npm --prefix slipfit/app install
-
-# open the window
-npm --prefix slipfit/app start</code></pre>
-
-          <div class="note">
-            <span class="tag">If the virtualenv step fails</span>
-            <p>On Debian and Ubuntu, <code>python3-venv</code> is sometimes missing while the system also
-              refuses a plain <code>pip install</code>. Create the environment without pip and install into it
-              directly:</p>
-            <pre class="term" data-name="~/slipfit" style="margin:12px 0 0"><code>python3 -m venv --without-pip .venv
-pip3 install --python .venv/bin/python -r requirements-dev.txt</code></pre>
-          </div>
-
-          <div class="note warn">
-            <span class="tag">On Windows, use the py launcher</span>
-            <p>Type <code>py -3.12</code>, not <code>python</code> or <code>python3</code>. Both of those
-              can silently resolve to some other Python that came bundled with an unrelated app, and the
-              install then fails several steps later with an error that gives no hint the interpreter was the
-              problem. <code>py -0p</code> lists what you actually have.</p>
-          </div>
-
-          <p>
-            Two more scripts are useful while editing Slipfit itself: <code>npm --prefix slipfit/app run dev</code>
-            rebuilds as you change the shell, and <code>run watch</code> rebuilds for a window that is
-            already open. The window starts a Python helper using <code>.venv/bin/python</code>; point it
-            elsewhere with <code>SLIPFIT_PYTHON=/path/to/python</code>.
-          </p>
-
-          <h3>Without a window at all</h3>
-          <p>
-            Everything except the 3D view also works from a terminal — describing the printer, printing
-            gauges, recording what fitted, exporting. You do not need any of it: the whole of this page
-            can be done in the window. It is there for scripting, and for re-exporting a folder of parts
-            after a re-calibration. It has <a href="#cli">a section of its own</a>.
           </p>
         </section>
 
@@ -2084,7 +2075,12 @@ pip3 install --python .venv/bin/python -r requirements-dev.txt</code></pre>
 
           <div class="app" aria-hidden="true">
             <div class="app-bar">
-              <span class="m">Slipfit</span><span class="f">bracket.slip</span><span class="f">●</span>
+              <span class="m">Slipfit</span>
+              <span class="app-tabs">
+                <span class="app-tab on">bracket.slip<span class="dot">●</span></span>
+                <span class="app-tab">plate.slip</span>
+                <span class="app-tab">motor.slip</span>
+              </span>
               <span class="sp"></span>
               <span class="f">showing</span><span class="chip b">kobra-s1-0.4 · PLA ▾</span>
               <span class="f">built · 1.2s</span>
@@ -2092,20 +2088,47 @@ pip3 install --python .venv/bin/python -r requirements-dev.txt</code></pre>
             </div>
             <div class="app-split">
               <div class="app-ed">
-                <div>13&nbsp; thickness = <span style="color:var(--primary)">6mm</span></div>
-                <div>14&nbsp; width&nbsp;&nbsp;&nbsp;&nbsp; = <span style="color:var(--primary)">30mm</span></div>
-                <div>…</div>
-                <div style="background:rgba(140,198,65,.12); color:#f0f0f0">30&nbsp; part = plate.add(</div>
-                <div style="background:rgba(140,198,65,.12); color:#f0f0f0">32&nbsp;&nbsp;&nbsp; bolt_hole(M3,
-                  fit=free),</div>
-                <div>36&nbsp;&nbsp;&nbsp; nut_trap(M3, …),</div>
+                <div>1&nbsp;&nbsp; thickness = <span style="color:var(--primary)">2mm</span></div>
+                <div>2&nbsp;&nbsp; width&nbsp;&nbsp;&nbsp;&nbsp; = <span style="color:var(--primary)">20mm</span></div>
+                <div>3&nbsp;&nbsp; length&nbsp;&nbsp;&nbsp; = <span style="color:var(--primary)">10mm</span></div>
+                <div>4</div>
+                <div>5&nbsp;&nbsp; part = box(width, length, thickness)</div>
+                <div>6</div>
+                <div style="background:rgba(140,198,65,.12); color:#f0f0f0">7&nbsp;&nbsp; part = part.add(</div>
+                <div style="background:rgba(140,198,65,.12); color:#f0f0f0">8&nbsp;&nbsp;&nbsp;&nbsp; bolt_hole(M3,
+                  fit=free, at=part.top.at(width / 2, length / 2))</div>
+                <div>9&nbsp;&nbsp; )</div>
               </div>
               <div class="app-vp">
+                <svg class="dia" viewBox="0 0 420 260" role="img"
+                  aria-label="A 60 by 30 by 6 plate with a hole through it, isometric">
+                  <polygon class="fc" opacity="0.13" points="51.0,117.0 263.1,221.1 263.1,195.1 51.0,91.0" />
+                  <polygon class="fc" opacity="0.07" points="263.1,221.1 369.2,169.1 369.2,143.0 263.1,195.1" />
+                  <path class="fc" opacity="0.20" fill-rule="evenodd" d="M51.0,91.0 L263.1,195.1 L369.2,143.0 L157.1,38.9 Z
+                       M175.1,117.0 A35,17.2 0 0 1 245.1,117.0 A35,17.2 0 0 1 175.1,117.0 Z" />
+                  <path class="eg" d="M51.0,117.0 L263.1,221.1" />
+                  <path class="eg" d="M263.1,221.1 L369.2,169.1" />
+                  <path class="eg hd" d="M157.1,65.0 L369.2,169.1" />
+                  <path class="eg hd" d="M51.0,117.0 L157.1,65.0" />
+                  <path class="eg" d="M51.0,117.0 L51.0,91.0" />
+                  <path class="eg" d="M263.1,221.1 L263.1,195.1" />
+                  <path class="eg" d="M369.2,169.1 L369.2,143.0" />
+                  <path class="eg hd" d="M157.1,65.0 L157.1,38.9" />
+                  <path class="eg" d="M51.0,91.0 L263.1,195.1" />
+                  <path class="eg" d="M263.1,195.1 L369.2,143.0" />
+                  <path class="eg" d="M369.2,143.0 L157.1,38.9" />
+                  <path class="eg" d="M157.1,38.9 L51.0,91.0" />
+                  <ellipse class="eg" cx="210.1" cy="117.0" rx="35" ry="17.2" fill="none" />
+                  <path class="eg" d="M175.1,117.0 L175.1,143.0" />
+                  <path class="eg" d="M245.1,117.0 L245.1,143.0" />
+                  <path class="eg" d="M175.1,143.0 A35,17.2 0 0 1 245.1,143.0" />
+                  <circle class="dot" cx="51.0" cy="117.0" r="3.4" />
+                </svg>
                 <div class="app-insp">
-                  <div class="hd">▸ chamfer(0.6mm) :46</div>
-                  <div>&nbsp;&nbsp;fillet(2mm) :45 · applied to</div>
-                  <div>&nbsp;&nbsp;&nbsp;&nbsp;heat-set insert M3 :39</div>
-                  <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;box(60, 30, 6mm) :23</div>
+                  <div class="hd">▸ bolt clearance hole M3</div>
+                  <div>&nbsp;&nbsp;modified &rsaquo; clearance hole &Oslash;3.2mm</div>
+                  <div>&nbsp;&nbsp;&nbsp;&nbsp;through &middot; applied to</div>
+                  <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;box(18mm, 10mm, 2mm)</div>
                 </div>
               </div>
             </div>
@@ -2201,15 +2224,10 @@ pip3 install --python .venv/bin/python -r requirements-dev.txt</code></pre>
             to go back to the ordinary view.
           </p>
 
-          <!-- REPLACE ME: <img src="images/nav-gizmo.png" alt="…" width="1200" height="800" /> -->
           <figure class="shot">
-            <div class="shot-ph">
-              <b>Image goes here</b>
-              <em>images/nav-gizmo.png · 1200 × 800</em>
-              <span>A close crop of the viewport's bottom-left corner showing the gizmo — the three coloured spokes, six
-                balls and the hub — with the part behind it, plus the same part after clicking the <code>+z</code> ball:
-                straight down, flat, and every hole a true circle.</span>
-            </div>
+            <img src="images/nav-gizmo.png" alt="A close crop of the viewport's bottom-left corner showing the gizmo — the three coloured spokes, six
+                balls and the hub — with the part behind it, plus the same part after clicking the +z ball:
+                straight down, flat, and every hole a true circle." width="1200" height="800" />
             <figcaption>Six balls and a hub. The flat view is the one in which “is that square to it” has an answer.
             </figcaption>
           </figure>
@@ -2375,14 +2393,9 @@ pip3 install --python .venv/bin/python -r requirements-dev.txt</code></pre>
             </table>
           </div>
 
-          <!-- REPLACE ME: <img src="images/xray.png" alt="…" width="1400" height="800" /> -->
+
           <figure class="shot">
-            <div class="shot-ph">
-              <b>Image goes here</b>
-              <em>images/xray.png · 1400 × 800</em>
-              <span>The same bored plate twice — solid on the left, and with <span class="kbd">X</span> pressed on the
-                right, so the walls of the bores are drawn as edges through the material.</span>
-            </div>
+            <img src="images/xray.png" alt="…" width="1400" height="800" />
             <figcaption>X-ray. This page keeps sending you back to it, because “did that cut actually happen” is the
               question it answers in one keystroke.</figcaption>
           </figure>
@@ -2416,15 +2429,9 @@ pip3 install --python .venv/bin/python -r requirements-dev.txt</code></pre>
             </div>
           </div>
 
-          <!-- REPLACE ME: <img src="images/trust-banner.png" alt="…" width="1600" height="700" /> -->
+
           <figure class="shot">
-            <div class="shot-ph">
-              <b>Image goes here</b>
-              <em>images/trust-banner.png · 1600 × 700</em>
-              <span>The real banner across the top of the editor on an untrusted file — <em>This file has not been
-                  run</em>, the line count and import list beside it, and the <strong>Trust and build</strong> button —
-                with the code below it highlighted and the viewport empty.</span>
-            </div>
+            <img src="images/trust-banner.png" alt="…" width="1600" />
             <figcaption>Shown, coloured, and not executed. The button is the only way past this.</figcaption>
           </figure>
 
@@ -2483,30 +2490,26 @@ pip3 install --python .venv/bin/python -r requirements-dev.txt</code></pre>
           <ol class="steps">
             <li>
               <h3>Make a file</h3>
-              <p>Anywhere you like, called <code>plate.slip</code>. In the window, <strong>File ▸ New</strong> gives you
-                an empty one.</p>
+              <p>When you open Slipfit the editor will be blank with a tab called <code>untitled.slip</code>. Click into
+                the window...</p>
             </li>
             <li>
               <h3>Type this</h3>
-              <pre class="file" data-name="plate.slip"><code class="slip">part = box(40mm, 20mm, 3mm).cut(
+              <pre class="file" data-name="untitled.slip"><code class="slip">part = box(40mm, 20mm, 3mm).cut(
     hole(5mm, 3mm, at=(20mm, 10mm, 3mm))
 )</code></pre>
             </li>
             <li>
               <h3>Save it</h3>
-              <p><span class="kbd">Ctrl/Cmd + S</span>. The part appears in the viewport. If this is a file Slipfit has
-                not run before, click <strong>Trust and build</strong> first.</p>
+              <p>As you type the in the editor and pause, Slipfit will try to build the model and show it to you.
+                You can save the file by hitting <span class="kbd">Ctrl/Cmd + S</span> or using the file menu.
+                If done correctly the part appears in the viewport, if not error messages will help guide you
+                in correcting the errors.
             </li>
           </ol>
 
-          <!-- REPLACE ME: <img src="images/first-part.png" alt="…" width="1600" height="900" /> -->
           <figure class="shot">
-            <div class="shot-ph">
-              <b>Image goes here</b>
-              <em>images/first-part.png · 1600 × 900</em>
-              <span>The window right after saving those three lines: <code>plate.slip</code> in the editor on the left,
-                the 40 × 20 × 3 plate with its hole sitting on the grid on the right.</span>
-            </div>
+            <img src="images/first-part.png" alt="…" width="1600" />
             <figcaption>What you should be looking at after step 3. If the viewport is empty instead, the file has not
               been trusted yet — or it never set <code>part</code>.</figcaption>
           </figure>
@@ -2525,7 +2528,8 @@ pip3 install --python .venv/bin/python -r requirements-dev.txt</code></pre>
 
               <dt>box(40mm, 20mm, 3mm)</dt>
               <dd>A rectangular block, 40 long, 20 wide and 3 thick. The brackets hold the three sizes, separated by
-                commas — the same way you would say “forty by twenty by three”.</dd>
+                commas — the same way you would say “forty by twenty by three”. Their order can be read as <strong>X, Y,
+                  Z</strong></dd>
 
               <dt>.cut(…)</dt>
               <dd>The full stop means <em>“and then do this to it”</em>. <code>.cut</code> takes a second shape away
@@ -2543,7 +2547,7 @@ pip3 install --python .venv/bin/python -r requirements-dev.txt</code></pre>
 
           <p>
             The indented middle line and the closing bracket on its own are just breathing room. You could
-            write the whole thing on one line; it would mean exactly the same. Slipfit does care about
+            write the whole thing on one line; it would mean exactly the same. Slipfit <strong>DOES</strong> care about
             indentation later on, in <a href="#compose">loops and functions</a>, and this page says so when
             it gets there.
           </p>
@@ -2583,8 +2587,9 @@ part  = plate.cut(hole(bore, thickness, at=plate.top.at(length / 2, width / 2)))
 
           <div class="note">
             <span class="tag">There is nothing to work out on paper</span>
-            <p>Every save rebuilds and redraws in about a second, so a shape in the wrong place is something
-              you see rather than something you calculate. Put it roughly where you think it goes, save, look,
+            <p>Every save or pause in typing rebuilds and redraws in about a second, so a shape in the wrong place is
+              something
+              you see rather than something you calculate. Put it roughly where you think it goes, look,
               adjust. That loop is the whole workflow.</p>
           </div>
         </section>
@@ -2901,8 +2906,8 @@ cylinder(6mm, 30mm, axis=(1, 0, 0))         # lying down, running along X</code>
             These are written <code>name=value</code>, and that pattern turns up everywhere in Slipfit. You
             can give them in any order and leave any of them out, so
             <code>cylinder(6mm, 30mm, axis=(1, 0, 0))</code> and
-            <code>cylinder(6mm, 30mm, label="post", axis=(1, 0, 0))</code> are the same cylinder, described
-            twice.
+            <code>cylinder(6mm, 30mm, label="post", axis=(1, 0, 0))</code> are the same cylinder, one just
+            has a label and the other one does not.
           </p>
 
           <h4><code>at=</code> — three ways to say where</h4>
@@ -2937,7 +2942,7 @@ cylinder(6mm, 30mm, axis=(1, 0, 0))         # lying down, running along X</code>
           </div>
 
           <p>
-            The second and third are the habit worth forming. Make the plate 60mm long instead of 40 and
+            The second and third are a habit worth forming. Make the plate 60mm long instead of 40 and
             <code>plate.top.at(10mm, 5mm)</code> is still 10 in from the corner, while
             <code>(20mm, 10mm, 3mm)</code> is now somewhere random on a different part.
           </p>
@@ -3020,8 +3025,8 @@ upright = plate.rotated(90deg, about=(1, 0, 0))        # tipped onto its edge</c
             into the material, so it cuts:
           </p>
           <pre class="file" data-name="shapes"><code class="slip">plate = box(40mm, 20mm, 3mm)
-plate.cut(hole(3mm, 5mm, at=plate.top.at(10mm, 10mm)))     # cuts through
-plate.cut(cylinder(3mm, 5mm, at=plate.top.at(10mm, 10mm))) # removes nothing at all</code></pre>
+plate = plate.cut(hole(3mm, 5mm, at=plate.top.at(10mm, 10mm)))     # cuts through
+plate = plate.cut(cylinder(3mm, 5mm, at=plate.top.at(10mm, 10mm))) # removes nothing at all</code></pre>
           <p>
             That last line is not an error. It builds a ⌀3 post standing on top of the plate, subtracts it
             from thin air, and hands the plate straight back — which is why <code>hole()</code> is the one
@@ -3112,6 +3117,22 @@ plate.mount                 # the point (10, 5, 3), by name, from now on</code><
           <p>Get the name wrong and it tells you what does exist:</p>
           <pre class="msg bad"><code>AnchorError: box(40mm, 20mm, 3mm) has no anchor named 'topp'
   = anchors on this solid: back, bottom, front, left, right, top</code></pre>
+
+          <h3>Cycling how many are drawn</h3>
+          <p>
+            Anchors show in the viewport as small teal arrows, the arrow pointing the way the face looks —
+            and a part with several named gets busy fast. <a href="#window">Press <span class="kbd">A</span></a>
+            to cycle what is drawn: <strong>named</strong> anchors only (the default), <strong>all</strong> of
+            them including the six every box starts with, and <strong>none</strong>. Clicking a face always
+            shows that body's anchors regardless of which state you are in — that is a reply to the click, not
+            part of the cycle.
+          </p>
+
+          <figure class="shot">
+            <img src="images/anchor-cycle.png" alt="…" width="1400" />
+            <figcaption>Three presses of <span class="kbd">A</span> — none, named, all, and inspected — on the same
+              part.</figcaption>
+          </figure>
         </section>
 
         <!-- ==================================================== COMBINE ====== -->
@@ -3157,7 +3178,7 @@ plate.mount                 # the point (10, 5, 3), by name, from now on</code><
           </p>
 
           <div class="note warn">
-            <span class="tag">The mistake everybody makes once</span>
+            <span class="tag">The mistake everybody makes more than once</span>
             <p>None of these change the solid you call them on. They hand you back a <strong>new</strong>
               one, and if you do not catch it in a name, nothing happens:</p>
             <pre class="file" data-name="the difference" style="margin:12px 0 0"><code class="slip">part.cut(hole(3mm, 6mm, at=plate.top.at(10mm, 10mm)))         # does nothing
@@ -3169,14 +3190,8 @@ part = part.cut(hole(3mm, 6mm, at=plate.top.at(10mm, 10mm)))  # drills the hole<
               <code>.fuse()</code>, <code>.finish()</code> and <code>.add()</code>.
             </p>
 
-            <!-- REPLACE ME: <img src="images/unused-result.png" alt="…" width="1400" height="800" /> -->
             <figure class="shot" style="margin:16px 0 0">
-              <div class="shot-ph">
-                <b>Image goes here</b>
-                <em>images/unused-result.png · 1400 × 800</em>
-                <span>The viewport showing a ghosted shape with the amber <code>1 unused result</code> badge, and the
-                  offending <code>part.cut(…)</code> line underlined in the editor beside it.</span>
-              </div>
+              <img src="images/unused-result.png" alt="…" width="1400" height="800" />
               <figcaption>What a thrown-away result looks like. The build succeeded — that is why this is worth being
                 able to recognise.</figcaption>
             </figure>
@@ -3823,14 +3838,8 @@ plate.edges(Vertical, expect=3)     # SelectionError: expected 3 edges, matched 
               <a href="#inspect">the inspector</a>.
             </p>
 
-            <!-- REPLACE ME: <img src="images/selection-lit.png" alt="…" width="1400" height="800" /> -->
             <figure class="shot" style="margin:16px 0 0">
-              <div class="shot-ph">
-                <b>Image goes here</b>
-                <em>images/selection-lit.png · 1400 × 800</em>
-                <span>The text cursor on a <code>fillet(…)</code> line in the editor, with exactly the faces that line
-                  produced lit up in the viewport beside it.</span>
-              </div>
+              <img src="images/selection-lit.png" alt="…" width="1400" height="800" />
               <figcaption>The answer to “did that description mean what I thought it meant” is on screen, not in your
                 head.</figcaption>
             </figure>
@@ -3966,6 +3975,11 @@ plate.edges(Vertical, expect=3)     # SelectionError: expected 3 edges, matched 
             and <code>chamfer_now()</code> do it there and then.
           </p>
 
+          <p>
+            Sometimes you may want to <code>fillet_now()</code> or <code>chamfer_now()</code>. It can make selection
+            easier, or shape a cutter before the <code>.cut()</code> operation.
+          </p>
+
           <h3>How big a blend can be</h3>
           <p>
             Big enough to fit in the material, and no bigger. It has to eat into <em>both</em> faces the
@@ -4080,7 +4094,8 @@ def standoff(height=10mm, outer=9mm, bore=3.2mm):
           <h4>Reading that <code>def</code>, if you have never met one</h4>
 
           <p>
-            A <code>def</code> is a recipe with dials on it. The first line names the recipe and lists the
+            A <code>def</code> is a recipe with dials on it <b>(Python function with parameters)</b>. The first line
+            names the recipe and lists the
             dials, each with the setting it takes if nobody touches it. The indented lines underneath are
             what the recipe does — <strong>the indentation is what says “this belongs to the recipe”</strong>,
             which is the one place in Slipfit where whitespace changes the meaning. <code>return</code> is
@@ -4253,6 +4268,11 @@ part = part.finish(
           <div class="ex-ft" style="border:1px solid var(--border)"><span class="ok">✓ builds</span><span>70 × 50 ×
               17mm</span><span>20124.68mm³</span><span>26 faces</span></div>
 
+          <figure class="shot" style="margin:16px 0 0">
+            <img src="images/composed.png" alt="…" width="1400" height="800" />
+            <figcaption>One .slip using another, perfect for parts you find yourself modeling over and over</figcaption>
+          </figure>
+
           <h3>When it does not work</h3>
 
           <p>Every one of these names the file that is actually wrong, and says what that file does offer:</p>
@@ -4303,15 +4323,8 @@ part = plate.add(
 
           <p><code>.add()</code> applies these in order, exactly as <code>.finish()</code> applies fillets.</p>
 
-          <!-- REPLACE ME: <img src="images/hardware-features.png" alt="…" width="1400" height="800" /> -->
           <figure class="shot">
-            <div class="shot-ph">
-              <b>Image goes here</b>
-              <em>images/hardware-features.png · 1400 × 800</em>
-              <span>The plate from <a href="#examples">example six</a> built, tipped so all three features are visible
-                at once — the clearance holes through the top, the hex nut pocket entered from underneath, and the
-                insert boss standing proud.</span>
-            </div>
+            <img src="images/hardware-features.png" alt="…" width="1400" height="800" />
             <figcaption>Three words, three different holes. None of the millimetres are in the file.</figcaption>
           </figure>
 
@@ -4538,18 +4551,11 @@ part = plate.add(
           <p>
             It all happens in one window. Open <strong>Build ▸ Calibration…</strong>
             (<span class="kbd">Ctrl/Cmd + K</span>) and a sheet slides over the viewport with five sections
-            in it, in the order you need them. Nothing here requires a terminal — though
-            <a href="#cli">there is one</a> if you would rather script it.
+            in it, in the order you need them.
           </p>
 
-          <!-- REPLACE ME: <img src="images/calibration-sheet.png" alt="…" width="1600" height="1100" /> -->
           <figure class="shot">
-            <div class="shot-ph">
-              <b>Image goes here</b>
-              <em>images/calibration-sheet.png · 1600 × 1100</em>
-              <span>The whole calibration sheet, scrolled to show all five sections at once: Profile, Hardware, Fits,
-                Gauges, and Compensation in this build.</span>
-            </div>
+            <img src="images/calibration-sheet.png" alt="…" width="1600" height="1100" />
             <figcaption>Build ▸ Calibration…, on a machine that has been through the loop once.</figcaption>
           </figure>
 
@@ -4669,7 +4675,7 @@ part = plate.add(
                 </table>
               </div>
 
-              <!-- REPLACE ME: <img src="images/calibration-profile.png" alt="…" width="1400" height="420" /> -->
+              <!-- REPLACE ME: <img src="images/calibration-profile.png" alt="…" width="1400" height="420" /> 
               <figure class="shot">
                 <div class="shot-ph">
                   <b>Image goes here</b>
@@ -4680,7 +4686,7 @@ part = plate.add(
                 </div>
                 <figcaption>The form disappears once there is a profile; the panel above it takes its place.
                 </figcaption>
-              </figure>
+              </figure> -->
 
               <p>
                 That makes one profile at revision 1, filed under <strong>printer plus nozzle</strong> —
@@ -4697,7 +4703,7 @@ part = plate.add(
                 then fill the row underneath and press <strong>Set insert</strong>.
               </p>
 
-              <!-- REPLACE ME: <img src="images/calibration-hardware.png" alt="…" width="1400" height="360" /> -->
+              <!-- REPLACE ME: <img src="images/calibration-hardware.png" alt="…" width="1400" height="360" /> 
               <figure class="shot">
                 <div class="shot-ph">
                   <b>Image goes here</b>
@@ -4705,7 +4711,7 @@ part = plate.add(
                   <span>The Hardware section: the size dropdown, the current insert row, and the form — knurl ⌀, depth,
                     flange ⌀, the “I measured these” tickbox and <strong>Set insert</strong>.</span>
                 </div>
-              </figure>
+              </figure> -->
 
               <div class="tbl">
                 <table>
@@ -4762,7 +4768,7 @@ part = plate.add(
                 landed.
               </p>
 
-              <!-- REPLACE ME: <img src="images/calibration-gauges.png" alt="…" width="1400" height="620" /> -->
+              <!-- REPLACE ME: <img src="images/calibration-gauges.png" alt="…" width="1400" height="620" /> 
               <figure class="shot">
                 <div class="shot-ph">
                   <b>Image goes here</b>
@@ -4772,7 +4778,7 @@ part = plate.add(
                 </div>
                 <figcaption>The stations are greyed out until a profile exists — there would be nowhere to record an
                   answer.</figcaption>
-              </figure>
+              </figure> -->
 
               <div class="tbl">
                 <table>
@@ -4836,14 +4842,9 @@ part = plate.add(
                 it needs to be.
               </p>
 
-              <!-- REPLACE ME: <img src="images/gauge-strip.jpg" alt="…" width="1400" height="800" /> -->
+              
               <figure class="shot">
-                <div class="shot-ph">
-                  <b>Image goes here</b>
-                  <em>images/gauge-strip.jpg · 1400 × 800</em>
-                  <span>A printed bolt-clearance gauge on the bench with a hand pushing an M3 cap screw through one of
-                    the stations, the tally notches visible along the near edge.</span>
-                </div>
+                <img src="images/gauge-strip.png" alt="…" width="1400" height="800" />
                 <figcaption>The measurement is a bolt and a fingertip. There is no caliper anywhere in this loop.
                 </figcaption>
               </figure>
@@ -4985,7 +4986,7 @@ part = plate.add(
 PETG fitted at 3.25  ->  delta +0.25
 correction: +0.05</code></pre>
 
-              <!-- REPLACE ME: <img src="images/calibration-materials.png" alt="…" width="1400" height="300" /> -->
+              <!-- REPLACE ME: <img src="images/calibration-materials.png" alt="…" width="1400" height="300" />
               <figure class="shot">
                 <div class="shot-ph">
                   <b>Image goes here</b>
@@ -4993,7 +4994,7 @@ correction: +0.05</code></pre>
                   <span>The materials table with three rows in the three states — PLA measured, PETG inherited with a δ
                     box and a <strong>check</strong> chip, and a third inherited but unchecked.</span>
                 </div>
-              </figure>
+              </figure> -->
 
               <p>The mark at the start of each row is the whole story:</p>
               <div class="tbl">
@@ -5194,13 +5195,7 @@ correction: +0.05</code></pre>
 
           <!-- REPLACE ME: <img src="images/export-report.png" alt="…" width="1400" height="900" /> -->
           <figure class="shot">
-            <div class="shot-ph">
-              <b>Image goes here</b>
-              <em>images/export-report.png · 1400 × 900</em>
-              <span>The real export report sheet over the viewport, after exporting <code>bracket.slip</code> with a
-                printer selected — the three compensation rows with their <code>measured, rev n</code> basis, the two
-                embedded modifiers, and the bed check.</span>
-            </div>
+            <img src="images/export-report.png" alt="…" width="1400" height="900" />
             <figcaption>The report as the app draws it. It opens every time you export.</figcaption>
           </figure>
 
@@ -5218,8 +5213,7 @@ correction: +0.05</code></pre>
           <p>
             Exporting re-runs your file with the profile bound, rather than stretching the finished shape
             afterwards. That is why a nut trap can gain a lead-in chamfer that exists only because your
-            printer sags on bridges — nothing that worked on the mesh could add one. The same export is
-            available <a href="#cli">from a terminal</a> if you are batching parts.
+            printer sags on bridges — nothing that worked on the mesh could add one.
           </p>
 
           <h3>What rides along in the 3MF</h3>
@@ -5735,202 +5729,6 @@ part = part.finish(
           </div>
         </section>
 
-        <!-- ==================================================== CLI ========= -->
-        <section id="cli">
-          <p class="sec-kicker">Going further</p>
-          <h2>The command line</h2>
-          <p class="sub">Everything in this page except the 3D view, without the window. You do not need any of it —
-            skip this section unless you want to script something.</p>
-
-          <p>
-            <code>examples/workshop.py</code> is the same calibration loop the
-            <a href="#calibrate">Calibration sheet</a> runs, driven by typing instead of clicking. It reads
-            and writes the same profiles, so the two are interchangeable: measure in the window and export
-            from a script, or the other way round.
-          </p>
-          <p>
-            It comes with the source rather than the installer, so this section assumes you have
-            <a href="#from-source">a clone set up</a>.
-          </p>
-
-          <div class="note warn">
-            <span class="tag">Point it at the right workshop first</span>
-            <p>The script defaults to the checkout it lives in, while the installed app keeps your
-              calibration somewhere else entirely. Left alone, the two measure onto different benches and the
-              symptom is a part that exports uncompensated with no warning at all.</p>
-            <pre class="term" data-name="~/slipfit" style="margin:12px 0 0"><code>export SLIPFIT_WORKSHOP=~/.config/Slipfit        # Linux
-export SLIPFIT_WORKSHOP="$APPDATA/Slipfit"       # Windows</code></pre>
-            <p style="margin-top:12px">If you only ever run from the clone, ignore this — the defaults are
-              already the same bench.</p>
-          </div>
-
-          <h3>The whole loop, in order</h3>
-          <pre class="term" data-name="~/slipfit"><code># describe the printer — one profile, revision 1
-.venv/bin/python examples/workshop.py init \
-  --printer "Kobra S1" --nozzle 0.4 --volume 220x220x250 --material PLA
-
-# say which heat-set inserts are in the drawer
-.venv/bin/python examples/workshop.py insert --size M3 --od 4.6 --depth 5.7 --measured
-
-# write the three gauges, then go and print them
-.venv/bin/python examples/workshop.py gauges
-
-# report the size printed at the station that fitted — not the notch count
-.venv/bin/python examples/workshop.py record bolt_clearance.free-m3 3.20
-.venv/bin/python examples/workshop.py record nut_trap-m3 5.65
-.venv/bin/python examples/workshop.py record insert_pocket-m3 4.10
-
-# what is measured, what is borrowed, which revisions exist
-.venv/bin/python examples/workshop.py status
-
-# the part, compensated
-.venv/bin/python examples/workshop.py export --material PLA</code></pre>
-
-          <div class="note">
-            <span class="tag">Report the size, not the station number</span>
-            <p><code>record</code> takes the millimetre figure printed at that station —
-              <code>3.20</code> — because that is what is written on the strip. The panel takes a click
-              instead and works the figure out itself; this is the same measurement typed by hand.
-            </p>
-          </div>
-
-          <h3>Every command</h3>
-          <div class="tbl">
-            <table>
-              <thead>
-                <tr>
-                  <th>Command</th>
-                  <th>Does</th>
-                  <th>In the app</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><code>workshop.py init</code></td>
-                  <td>Describe the printer. <code>--printer --nozzle --volume --material</code>.</td>
-                  <td>Calibration ▸ Profile</td>
-                </tr>
-                <tr>
-                  <td><code>workshop.py insert</code></td>
-                  <td>Say which heat-set inserts you own. <code>--size --od --depth --flange --measured</code>.</td>
-                  <td>Calibration ▸ Hardware</td>
-                </tr>
-                <tr>
-                  <td><code>workshop.py fits</code></td>
-                  <td>Air a <a href="#fitted">fitted cut</a> leaves, per face. <code>--free --close --press</code>.</td>
-                  <td>Calibration ▸ Fits</td>
-                </tr>
-                <tr>
-                  <td><code>workshop.py gauges</code></td>
-                  <td>Write the three gauges to <code>exports/gauges/</code>.</td>
-                  <td>Calibration ▸ Gauges</td>
-                </tr>
-                <tr>
-                  <td><code>workshop.py record &lt;gauge&gt; &lt;mm&gt;</code></td>
-                  <td>Report the station that fitted. Saves a new revision.</td>
-                  <td>Clicking a station</td>
-                </tr>
-                <tr>
-                  <td><code>workshop.py status</code></td>
-                  <td>What is measured, what is borrowed, which revisions exist.</td>
-                  <td>The Profile panel</td>
-                </tr>
-                <tr>
-                  <td><code>workshop.py inherit &lt;material&gt;</code></td>
-                  <td>Borrow another material's gauges.</td>
-                  <td>The <em>inherit</em> chip</td>
-                </tr>
-                <tr>
-                  <td><code>workshop.py check &lt;material&gt; &lt;delta&gt;</code></td>
-                  <td>Record the one-number correction for a borrowed material.</td>
-                  <td>The <code>δ mm</code> box</td>
-                </tr>
-                <tr>
-                  <td><code>workshop.py rollback &lt;n&gt;</code></td>
-                  <td>Write revision <code>n</code>'s contents as a new revision.</td>
-                  <td>The revision chips</td>
-                </tr>
-                <tr>
-                  <td><code>workshop.py export</code></td>
-                  <td>Export a model. <code>--file --material --nominal --plain --stl</code>.</td>
-                  <td>File ▸ Export</td>
-                </tr>
-                <tr>
-                  <td><code>workshop.py inspect</code></td>
-                  <td>The ancestry of a face, as text.</td>
-                  <td><a href="#inspect">The inspector</a></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>Exporting</h3>
-          <pre class="term" data-name="~/slipfit"><code>.venv/bin/python examples/workshop.py export                  # 3MF, compensated
-.venv/bin/python examples/workshop.py export --material PETG
-.venv/bin/python examples/workshop.py export --nominal        # no profile bound
-.venv/bin/python examples/workshop.py export --plain          # 3MF, no extras
-.venv/bin/python examples/workshop.py export --stl</code></pre>
-
-          <p>
-            The report is the same report the window shows, printed rather than drawn — which is what makes
-            this safe to put in a script. Nothing is compensated silently:
-          </p>
-          <pre class="msg good"><code>Export  bracket.3mf
-  orientation  as designed · bottom on the bed
-  profile      kobra-s1-0.4-pla r7
-
- embedded modifiers
-  ▸ 5 perimeters ⌀8.52mm × 3.6mm    at M3 nut trap
-  ▸ solid infill ⌀7.5mm × 6.9mm     M3 insert boss
-
- compensation applied
-  M3 clear   3mm   -> 3.2mm
-  M3 nut AF  5.5mm -> 5.65mm
-  M3 insert  4.6mm -> 4.1mm
-
-  ✓ fits 220mm × 220mm × 250mm</code></pre>
-
-          <div class="note">
-            <span class="tag">Run it through the virtualenv</span>
-            <p>The CAD kernel is installed in <code>.venv</code> and nowhere else, so a bare
-              <code>python3</code> fails with <code>ModuleNotFoundError: No module named 'OCP'</code>. Either
-              write <code>.venv/bin/python</code> every time, or <code>source .venv/bin/activate</code> once
-              per terminal. On Windows the path is <code>.venv\Scripts\python</code>.
-            </p>
-          </div>
-
-          <h3>What it is actually good for</h3>
-          <div class="tbl">
-            <table>
-              <thead>
-                <tr>
-                  <th>Job</th>
-                  <th>Why not the window</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Re-exporting a folder of parts after re-calibrating</td>
-                  <td>One loop over the files beats opening each one and pressing <span class="kbd">Ctrl/Cmd + E</span>.
-                  </td>
-                </tr>
-                <tr>
-                  <td>Exporting the same part in two materials</td>
-                  <td><code>--material</code> twice, no clicking between.</td>
-                </tr>
-                <tr>
-                  <td>Building a part on a machine with no screen</td>
-                  <td>There is no window to open.</td>
-                </tr>
-                <tr>
-                  <td>Checking a model still builds, on every commit</td>
-                  <td>It exits non-zero when it does not.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
         <!-- ==================================================== ERRORS ====== -->
         <section id="errors">
           <p class="sec-kicker">Going further</p>
@@ -5946,12 +5744,7 @@ export SLIPFIT_WORKSHOP="$APPDATA/Slipfit"       # Windows</code></pre>
 
           <!-- REPLACE ME: <img src="images/error-panel.png" alt="…" width="1400" height="800" /> -->
           <figure class="shot">
-            <div class="shot-ph">
-              <b>Image goes here</b>
-              <em>images/error-panel.png · 1400 × 800</em>
-              <span>A <code>.slip</code> with one bad line — the failing text underlined in the editor, and the error
-                panel open under it naming the file, the line and the fix.</span>
-            </div>
+            <img src="images/error-panel.png" alt="…" width="1400" height="800" />
             <figcaption>The same message twice: once where you typed it, once in full underneath.</figcaption>
           </figure>
 
@@ -6062,13 +5855,6 @@ export SLIPFIT_WORKSHOP="$APPDATA/Slipfit"       # Windows</code></pre>
                     identical and still compensated.</td>
                 </tr>
                 <tr>
-                  <td>Your calibration seems to have vanished</td>
-                  <td>You measured in one place and exported from another. The app keeps its workshop under
-                    <code>~/.config/Slipfit</code>; <code>workshop.py</code> defaults to the checkout. <a
-                      href="#cli">Point them at the same bench.</a>
-                  </td>
-                </tr>
-                <tr>
                   <td>The window is stuck building</td>
                   <td><span class="kbd">Ctrl/Cmd + .</span> cancels. An endless loop in a model cannot be interrupted
                     from inside it, which is why models run in a separate process.</td>
@@ -6077,11 +5863,6 @@ export SLIPFIT_WORKSHOP="$APPDATA/Slipfit"       # Windows</code></pre>
                   <td>You have edited your way into a mess</td>
                   <td><strong>Build ▸ Restore last good build</strong>. The last text that built cleanly is kept on
                     disk, so it survives closing the app.</td>
-                </tr>
-                <tr>
-                  <td><code>ModuleNotFoundError: No module named 'OCP'</code></td>
-                  <td>Running from source, with a bare <code>python3</code>. The CAD kernel lives in <code>.venv</code>.
-                  </td>
                 </tr>
               </tbody>
             </table>
@@ -6195,10 +5976,6 @@ Quantity(value, "mm")                  # what a unit literal becomes</code></pre
           <p>Python's own built-ins are all there, and nothing is removed. <code>import</code> works for anything else
             in the standard library.</p>
 
-          <p>
-            The <code>workshop.py</code> commands have <a href="#cli">their own section</a>.
-          </p>
-
           <h3>The deeper reference</h3>
           <p>This page is the way in. When you want the exact detail, each layer has its own document in the repository:
           </p>
@@ -6260,7 +6037,7 @@ Quantity(value, "mm")                  # what a unit literal becomes</code></pre
           </p>
           <p>
             Every example on this page was executed against the kernel before it was written down.
-            <a href="https://github.com/CodeChomper/slipfit">Source on GitHub</a> ·
+            <a href="https://github.com/CodeChomper/slipfit-releases">Release page on GitHub</a> ·
             <a href="#top">Back to the top</a>
           </p>
         </footer>
