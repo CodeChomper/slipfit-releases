@@ -1795,9 +1795,11 @@
         <a href="#units">Numbers carry units</a>
         <a href="#shapes">Shapes, and where they go</a>
         <a href="#anchors">Anchors</a>
+        <a href="#profiles">Profiles, extrude and revolve</a>
         <a href="#combine">Combining shapes</a>
         <a href="#fitted">Cuts that leave room</a>
         <a href="#select">Choosing edges and faces</a>
+        <a href="#shell">Hollowing out — shell</a>
         <a href="#finish">Fillets and chamfers</a>
         <a href="#compose">Using another file</a>
 
@@ -1956,10 +1958,12 @@
           <h3>What it does not do</h3>
           <p>
             Worth knowing up front so you do not go hunting. In this version 0.5.0 there are no assemblies and no
-            interference checking. No sweeps, lofts, revolves, shells or offsets. No sketching, no constraints, no
-            mirroring. Version 1.0 is in the works to address some of these. You build shapes by adding solid blocks
-            together and cutting solid blocks away — the way you would describe the part to somebody over the phone.
-            One file produces one part, though it <a href="#compose">can be built out of several files</a>.
+            interference checking. No sweeps, lofts, splines, draft angles or offsets. No constraint solver — a
+            <a href="#profiles">profile's</a> dimensions are the code, not a drag — and no mirroring or patterns yet.
+            Version 1.0 is in the works to address some of these. Most of a part is solid blocks added together and
+            cut away — the way you would describe it to somebody over the phone — plus, now, a 2D outline drawn once
+            and swept into a solid for the rounded and revolved shapes a block alone cannot make. One file produces
+            one part, though it <a href="#compose">can be built out of several files</a>.
           </p>
           <p>
             If you want to model an organic shape, use something else. If you want a bracket, a mount, an
@@ -2715,10 +2719,12 @@ rod  = 3/8in      # 9.525mm</code></pre>
             in saying where each one goes.</p>
 
           <p>
-            There is nothing to sketch and no profile to extrude. A Slipfit part is solid blocks, cylinders
-            and cones, added onto one another and taken away from one another. If you can describe the part
-            out loud — <em>“a 60 by 30 plate, 6 thick, with a ⌀3 hole 10 in from each end”</em> — you have
-            already said most of the file.
+            Most of a part is solid blocks, cylinders and cones, added onto one another and taken away from
+            one another. If you can describe the part out loud — <em>"a 60 by 30 plate, 6 thick, with a ⌀3
+              hole 10 in from each end"</em> — you have already said most of the file. For the rest — a
+            rounded edge, a tapered rib, anything a block alone cannot describe — you draw a
+            <a href="#profiles">profile</a> instead: a 2D outline, in code, that becomes a solid by being
+            extruded or revolved.
           </p>
 
           <h3>Which one do I want?</h3>
@@ -3133,6 +3139,218 @@ plate.mount                 # the point (10, 5, 3), by name, from now on</code><
             <figcaption>Three presses of <span class="kbd">A</span> — none, named, all, and inspected — on the same
               part.</figcaption>
           </figure>
+        </section>
+
+        <!-- ==================================================== PROFILES ===== -->
+        <section id="profiles">
+          <p class="sec-kicker">Writing a .slip</p>
+          <h2>Profiles, extrude and revolve</h2>
+          <p class="sub">A 2D outline, drawn in the plane of an anchor, that becomes a solid by being swept. For the
+            rounded edge, the tapered rib and the lathe-turned foot the five primitives cannot describe.</p>
+
+          <p>
+            A <strong>profile</strong> is a closed outline you draw a run at a time — a straight line or an
+            arc, each ending where the next begins — until you close it back to where it started. On its own
+            it is flat and builds nothing; <code>.extruded()</code> pushes it into a solid along a straight
+            line, and <code>.revolved()</code> spins it around a line to make one.
+          </p>
+
+          <pre class="file" data-name="panel.slip"><code class="slip">outline = (
+    profile(on=plate.top)
+    .line_to(40mm, 0mm)
+    .arc_to(48mm, 8mm, radius=8mm, label="nose radius")
+    .line_to(48mm, 30mm)
+    .line_to(0mm, 30mm)
+    .close()
+)
+
+rib = outline.extruded(6mm)      # 1426.27mm2 of outline, 8557.59mm3, 7 faces</code></pre>
+
+          <h3>Reading that out loud</h3>
+          <div class="gloss">
+            <dl>
+              <dt>profile(on=plate.top)</dt>
+              <dd>Start drawing, in the plate's top face — the same <code>(u, v)</code> frame
+                <code>plate.top.at(10mm, 15mm)</code> already uses. Nothing about position or facing needs
+                saying twice.</dd>
+              <dt>.line_to(40mm, 0mm)</dt>
+              <dd>A straight run from wherever the pen currently is to that point.</dd>
+              <dt>.arc_to(48mm, 8mm, radius=8mm)</dt>
+              <dd>A curved run to that point, bowing by the radius given. It is always the shorter way round
+                — <a href="#profiles-arc">why, below</a>.</dd>
+              <dt>.close()</dt>
+              <dd>Draws the run back to the start and hands back a finished <code>Profile</code>. Nothing
+                about a profile can be built before this runs.</dd>
+              <dt>.extruded(6mm)</dt>
+              <dd>Pushes the flat outline 6mm along the anchor's own normal, into a solid.</dd>
+            </dl>
+          </div>
+
+          <p>
+            Every number is in the plate's own frame — the same one <a href="#anchors">anchors</a> already
+            use — so the outline moves with the plate exactly as an anchor does, and <code>48mm</code> can be
+            <code>plate_width - 2 * wall</code> if that is what it means.
+          </p>
+
+          <div class="note">
+            <span class="tag">There is no constraint solver, on purpose</span>
+            <p>Other CAD programs put a solver behind a sketch because the sketch is dragged with a mouse,
+              and the solver is what stops a drag from destroying the design. Here the code already is the
+              constraint system — a name, an expression, a dimension that refuses <code>3mm + 3</code> — so a
+              second, numerical source of truth about the same shape would only get in the way of the one
+              already answering "why is this here?"</p>
+          </div>
+
+          <h3 id="profiles-arc">The radius is a direction, not just a size</h3>
+          <p>
+            <code>radius=8mm</code> puts the arc's centre to the <strong>left</strong> of travel;
+            <code>-8mm</code> puts it to the <strong>right</strong>. A path turns toward its centre, so
+            positive is a left turn — and an outline drawn counter-clockwise, the usual way, turns left at
+            every convex corner, which is why the unsigned, common case is the one you write with no
+            ceremony. An arc is always the <strong>minor</strong> one: past a half turn, draw it as two arcs,
+            because a <code>radius</code> that silently picked between a 30° corner and a 330° loop would be
+            a wrong answer with nothing on screen to contradict it.
+          </p>
+
+          <h3>What a bad outline tells you</h3>
+          <p>Every one of these is refused at the call that made it wrong, not at <code>.extruded()</code>
+            three lines later:</p>
+          <pre class="msg bad"><code>ProfileError: line_to(0mm, 0mm) does not move — it ends where it starts, (0.00, 0.00)
+  = a segment of zero length has no wall to sweep
+
+ProfileError: arc_to() radius 2mm cannot reach (48.00, 8.00) from (40.00, 0.00)
+  = those points are 11.314mm apart, so the radius must be at least 5.657mm
+
+ProfileError: a profile needs at least three straight runs, and this one closes with 2
+  = two straight runs enclose no area, so there is nothing to sweep
+
+ProfileError: the profile crosses itself at (20.00, 10.00)
+  = line_to(40mm, 0mm) (panel.slip:4) crosses line_to(40mm, 20mm) (panel.slip:6)</code></pre>
+          <p>
+            The three-run floor is about straight runs specifically, not a rule about sides — a round pocket
+            is two half-turn arcs and nothing more. And which way round you drew it never matters: an outer
+            boundary is treated as counter-clockwise and a hole as clockwise regardless of which way your
+            <code>line_to</code> and <code>arc_to</code> calls actually ran, because a "hole" that silently
+            added area would be a worse surprise than being turned around for you.
+          </p>
+
+          <h3>Watching it while you draw it</h3>
+          <p>
+            An outline you have not swept yet is not invisible while you work on it: it draws in the
+            viewport in violet, as its boundary loops, the moment <code>.close()</code> completes — the same
+            treatment an unused cutting tool gets <a href="#window">elsewhere on this page</a>. Click it and
+            the inspector lists its runs in the order you drew them, each against the line that drew it. The
+            moment something sweeps it, it disappears, exactly as a cutting tool disappears into the boolean
+            that consumes it.
+          </p>
+
+          <figure class="shot">
+            <img src="images/profile-outline.png" alt="Profile on screen unconsumed" width="1400" height="800" />
+            <figcaption>An outline nobody has swept yet is not invisible. It disappears the moment
+              something sweeps it.</figcaption>
+          </figure>
+
+          <h3>Extrude and revolve</h3>
+          <pre class="file" data-name="sweeping"><code class="slip">outline.extruded(6mm)                          # straight up, along the anchor's normal
+outline.extruded(-3mm)                         # the other way — a cutting tool
+
+section.revolved(about=plate.top.u)            # a full turn
+section.revolved(90deg, about=plate.top.u)     # a quarter of one</code></pre>
+
+          <p>
+            <strong>Extrude has no direction to give it</strong> — an outline drawn on <code>plate.top</code>
+            extrudes upward and one drawn on <code>plate.bottom</code> extrudes downward, because the anchor
+            already knows which way it faces. A negative height reverses it, which is what an extruded
+            pocket-cutting tool wants. The result is an ordinary solid with two anchors of its own:
+            <code>top</code>, on the cap the sweep travelled to, still in the coordinates the outline was
+            drawn in; and <code>bottom</code>, on the outline's own plane.
+          </p>
+
+          <h4>Revolving about a line</h4>
+          <p>
+            A revolve turns an outline about a <strong>line</strong>, and an anchor is a <em>plane</em> — so
+            rather than a new syntax for lines, the two an anchor already has are offered by name:
+            <code>plate.top.u</code> and <code>plate.top.v</code> run through its origin, and
+            <code>plate.top.at(20mm, 0mm).u_axis</code> is the same direction through a point on it.
+          </p>
+
+          <pre class="file" data-name="knob.slip"><code class="slip">section = (                         # 10 long, 5..15 out from the axis
+    profile(on=plate.top.at(0mm, 5mm))
+    .line_to(10mm, 5mm).line_to(10mm, 15mm).line_to(0mm, 15mm).close()
+)
+
+section.revolved(about=plate.top.u)              # 6283.19mm3, 4 faces
+section.revolved(90deg, about=plate.top.u)       # 1570.80mm3, 6 faces</code></pre>
+
+          <p>
+            A partial turn leaves two flat faces where it started and stopped, and gets <code>start</code>
+            and <code>end</code> anchors on them. A full turn has no such faces, and gets neither — a frame
+            describing a face that is not there is exactly what anchors are built to avoid.
+          </p>
+
+          <div class="note warn">
+            <span class="tag">Two ways a revolve refuses to lie</span>
+            <p>Turning about a line that does not lie in the outline's own plane, or an outline that
+              straddles the axis it is turning about, both build <em>something</em> in raw OCCT — quietly the
+              wrong thing in the first case, a solid passing through itself in the second. Slipfit checks
+              both before the turn happens:</p>
+            <pre class="msg bad" style="margin:12px 0 0"><code>KernelError: front.u is not in the plane profile(on=top) was drawn on
+  = it passes 3.000mm off top; a revolve turns an outline about a line lying in its own plane
+
+KernelError: straddler lies on both sides of top.u
+  = far side (knob.slip:5) is on one side and line_to(10mm, -5mm) (knob.slip:4) on the
+    other, so the turn would sweep the solid through itself</code></pre>
+          </div>
+
+          <h3>Which line drew this wall</h3>
+          <p>
+            Every side face of a swept solid resolves in the inspector to the exact <code>line_to</code> or
+            <code>arc_to</code> that drew it, not just to the extrude or revolve that swept it:
+          </p>
+          <pre class="msg"><code>click the curved side wall
+▸ extrude(6mm)             panel.slip:19      created
+    nose radius            panel.slip:16      from segment
+    profile(on=top)        panel.slip:15      applied to</code></pre>
+
+          <!-- REPLACE ME: <img src="images/profile-inspector.png" alt="…" width="1400" height="800" /> -->
+          <figure class="shot">
+            <img src="images/profile-inspector.png" alt="Profile extruded and shape inspected leads back to the line that made it." width="1400" height="800" />
+            <figcaption>Profile extruded and shape inspected leads back to the line that made it.</figcaption>
+          </figure>
+
+          <p>
+            That is also usable as a selector, which is the point of labelling a run in the first place —
+            there is no way to ask the <em>geometry</em> for "the wall the nose radius made" the way you can
+            ask for "every round face", because a part can easily have more than one round wall:
+          </p>
+          <div class="tbl">
+            <table>
+              <thead>
+                <tr>
+                  <th>Selector</th>
+                  <th>Matches</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>Swept</code></td>
+                  <td>Every wall a profile drew — the whole side set, never the caps.</td>
+                </tr>
+                <tr>
+                  <td><code>FromSegment("nose radius")</code></td>
+                  <td>Only the wall swept from the run with that label.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <pre class="file" data-name="finishing-a-sweep"><code class="slip">rib.faces(Swept)                                     # 5 walls; the 2 caps are not
+rib.faces(FromSegment("nose radius"), expect=1)
+rib.finish(chamfer(Circular & OnFace(FromSegment("nose radius")), 0.5mm))</code></pre>
+          <p>
+            A label that names nothing matches nothing, and <code>expect=</code> —
+            <a href="#select">already the rule everywhere else</a> — is how that shows up as an error instead
+            of a silent no-op.
+          </p>
         </section>
 
         <!-- ==================================================== COMBINE ====== -->
@@ -3843,6 +4061,119 @@ plate.edges(Vertical, expect=3)     # SelectionError: expected 3 edges, matched 
               <figcaption>The answer to “did that description mean what I thought it meant” is on screen, not in your
                 head.</figcaption>
             </figure>
+          </div>
+        </section>
+
+        <!-- ==================================================== SHELL ======== -->
+        <section id="shell">
+          <p class="sec-kicker">Writing a .slip</p>
+          <h2>Hollowing out — shell</h2>
+          <p class="sub">Turn a solid block into a shell of it, to a wall thickness you choose, with a face or two
+            left open to get inside.</p>
+
+          <pre class="file" data-name="case.slip"><code class="slip">case = box(60mm, 40mm, 25mm).shelled(2mm, open=TopFace)     # 13632mm3, 11 faces</code></pre>
+
+          <p>
+            Six faces outside, five in, and the rim the opening left behind — a 20mm cube's worth of
+            material scooped out to a 2mm wall, with the top left off to reach the cavity. Ask for more than
+            one face open and, as everywhere else a face gets picked out, it is a
+            <a href="#select">description</a> rather than a click:
+          </p>
+          <pre class="file" data-name="tube.slip"><code class="slip">tube = box(60mm, 40mm, 25mm).shelled(2mm, open=TopFace | BottomFace, expect=2)</code></pre>
+
+          <div class="note warn">
+            <span class="tag"><code>open=</code> is required, never defaulted</span>
+            <p>A shell with nothing open is a sealed void — invisible, unreachable, and indistinguishable
+              from having forgotten the argument. It is also the one shell that needs no shell:
+              <code>body.cut(inner)</code> already gives you a sealed cavity, with better provenance and no
+              new operation. What <code>shelled</code> is for is the opening.</p>
+          </div>
+
+          <!-- REPLACE ME: <img src="images/shell-xray.png" alt="…" width="1400" height="800" /> -->
+          <figure class="shot">
+            <img src="images/shell-xray.png" alt="A shelled case with X-ray turned on so you can see the floor of the opening" width="1400" height="800" />
+            <figcaption>The same question X-ray already answers for a cut - “did that actually happen” -
+              answered for a shell.</figcaption>
+          </figure>
+
+          <h3>Reaching the inside</h3>
+          <p>
+            The shell adds no anchors of its own — the frame worth having is the cavity floor, and that face
+            belongs to a shell that may not have hollowed there, so it is reached by arithmetic on a frame
+            that <em>is</em> real:
+          </p>
+          <pre class="file" data-name="case.slip"><code class="slip">floor = case.top.at(10mm, 10mm).offset(-23mm)        # (10, 10, 2), facing up
+part  = case.add(heat_insert(M3, at=floor))
+boss  = cylinder(8mm, 6mm, at=floor)                 # standing on the cavity floor</code></pre>
+          <p>
+            <code>top</code> is the frame the cavity opens through, so walking <em>down</em> it by a negative
+            offset lands on the floor still facing the way a feature needs to be driven. The same point
+            reached from <code>case.bottom.at(u, v).offset(-2mm)</code> faces the other way — right for
+            something entering the floor from outside, wrong for something sitting in it.
+          </p>
+
+          <h3>Round the outside first and the inside comes along</h3>
+          <pre class="file" data-name="case.slip"><code class="slip">case = box(60mm, 40mm, 25mm).fillet_now(Vertical & OnFace(Planar), 4mm)
+case = case.shelled(2mm, open=TopFace)               # 19 faces, inner radius 2mm</code></pre>
+          <p>
+            Four rounded outer corners on a 2mm wall come back as four <em>2mm</em> inner corners, for free —
+            the inner face is the offset of the outer one, so a blend applied before the shell is carried
+            through it. <a href="#finish">Blending after</a> leaves the inside sharp instead, because the
+            inner faces did not exist yet when the selector ran — the same ordering argument as everywhere
+            else a description is matched against a solid.
+          </p>
+
+          <h3>A shelled wall still names the line that drew it</h3>
+          <p>Shell downstream of a swept <a href="#profiles">profile</a> does not lose the ancestry either —
+            both the outer wall and the inner one it became answer to the same run:</p>
+          <pre class="file" data-name="case.slip"><code class="slip">case = outline.extruded(20mm).shelled(2mm, open=TopFace)   # the outline from earlier
+case.faces(FromSegment("nose radius"), expect=2)           # the wall, outside and in</code></pre>
+          <pre class="msg"><code>click the inner curved wall
+▸ shell(2mm)               case.slip:21      modified
+    extrude(20mm)          case.slip:19      created
+      nose radius          case.slip:16      from segment
+      profile(on=top)      case.slip:15      applied to</code></pre>
+
+          <figure class="shot">
+            <img src="images/shell-inspector.png" alt="Shelled extrusion keeps the history of what made it" width="1400" height="800" />
+            <figcaption>The chain above, as the app actually draws it.</figcaption>
+          </figure>
+
+          <h3>What it refuses, and why</h3>
+          <p>
+            OCCT's own shelling operation reports success and then, on the wrong input, hands back the
+            original solid untouched, a shape of no volume, or a wall that is not the one that was asked
+            for. None of those are trusted at face value — the wall is <em>measured</em> on every face that
+            stayed closed, by pairing it with the inner face it became, so a refusal names the real thickness
+            rather than guessing:
+          </p>
+          <pre class="msg bad"><code>KernelError: shell(11mm) could not be built from blank
+  = OCCT reported the offset unfinished; the thickest wall blank takes is about 9.96mm
+
+KernelError: shell(12mm) left a wall thinner than asked on knob
+  = the wall behind knob (case.slip:4) came back 8.00mm rather than 12.00mm, so the
+    inside is not the shape it should be; the thickest wall knob takes is about 9.93mm</code></pre>
+          <p>
+            That second one is the dangerous case left unchecked: ask a ⌀20 cylinder for a 12mm wall and the
+            inner radius passes through zero and comes out the other side — a valid solid, a plausible
+            volume, and a cavity that is not the one you asked for. The measured wall is what catches it.
+          </p>
+          <pre class="msg bad"><code>KernelError: shell(2mm) hollowed nothing out of fuse(leg)
+  = every face came back untouched; no wall thickness hollows fuse(leg) at all — two
+    of its faces are coplanar and share an edge, one of them from arm (case.slip:1),
+    which stops the offset before it starts; the boolean that left them can merge
+    them with simplify=True</code></pre>
+          <p>
+            That one has a specific cause and a specific fix: two fused boxes sharing a face plane leave
+            both halves of it in the result, which stops the offset before it starts.
+            <code>fuse(tool, simplify=True)</code> merges them and the shell goes through.
+          </p>
+
+          <div class="note">
+            <span class="tag">A wall thicker than the material has no right answer</span>
+            <p>These checks catch what is <em>provably</em> wrong — nothing removed, nothing left, a wall
+              that is not the wall asked for — rather than second-guessing a shape OCCT built
+              self-consistently from a request that was simply too much to ask of the material.</p>
           </div>
         </section>
 
@@ -4675,7 +5006,7 @@ part = plate.add(
                 </table>
               </div>
 
-              <!-- REPLACE ME: <img src="images/calibration-profile.png" alt="…" width="1400" height="420" /> 
+              <!-- REPLACE ME: <img src="images/calibration-profile.png" alt="…" width="1400" height="420" />
               <figure class="shot">
                 <div class="shot-ph">
                   <b>Image goes here</b>
@@ -5193,7 +5524,6 @@ correction: +0.05</code></pre>
               printed vertically, a borrowed material.</span>
           </div>
 
-          <!-- REPLACE ME: <img src="images/export-report.png" alt="…" width="1400" height="900" /> -->
           <figure class="shot">
             <img src="images/export-report.png" alt="…" width="1400" height="900" />
             <figcaption>The report as the app draws it. It opens every time you export.</figcaption>
@@ -5742,7 +6072,6 @@ part = part.finish(
             produced it.
           </p>
 
-          <!-- REPLACE ME: <img src="images/error-panel.png" alt="…" width="1400" height="800" /> -->
           <figure class="shot">
             <img src="images/error-panel.png" alt="…" width="1400" height="800" />
             <figcaption>The same message twice: once where you typed it, once in full underneath.</figcaption>
@@ -5880,7 +6209,44 @@ part = part.finish(
 cylinder(diameter, height, *, at=None, axis=(0,0,1), label=None)
 cone(diameter, top_diameter, height, *, at=None, axis=(0,0,1), label=None)
 hex_prism(across_flats, height, *, at=None, axis=(0,0,1), rotation=None, label=None)
-hole(diameter, depth, *, at=None, axis=None, label=None)</code></pre>
+hole(diameter, depth, *, at=None, axis=None, label=None)
+profile(on=anchor_or_position, *, label=None)</code></pre>
+
+          <h3>Drawing and sweeping a <a href="#profiles">profile</a></h3>
+          <div class="tbl">
+            <table>
+              <thead>
+                <tr>
+                  <th>Member</th>
+                  <th>Gives</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>.line_to(u, v, *, label="")</code></td>
+                  <td>A straight run to that point.</td>
+                </tr>
+                <tr>
+                  <td><code>.arc_to(u, v, *, radius, label="")</code></td>
+                  <td>The minor arc to that point; the sign of <code>radius</code> is a turn direction.</td>
+                </tr>
+                <tr>
+                  <td><code>.close(*, label="")</code></td>
+                  <td>Draws the closing run and returns a finished <code>Profile</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>.extruded(height)</code></td>
+                  <td>A solid, pushed along the anchor's own normal.</td>
+                </tr>
+                <tr>
+                  <td><code>.revolved(angle=360deg, *, about)</code></td>
+                  <td>A solid, turned about an <code>Axis</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <pre><code class="slip">plate.top.u   plate.top.v                       # the two axis lines through an anchor's origin
+plate.top.at(20mm, 0mm).u_axis                   # the same line through a point on it</code></pre>
 
           <h3>Working with a solid</h3>
           <div class="tbl">
@@ -5909,6 +6275,11 @@ hole(diameter, depth, *, at=None, axis=None, label=None)</code></pre>
                 <tr>
                   <td><code>.finish(*blends)</code></td>
                   <td>A new solid with fillets and chamfers applied in order.</td>
+                </tr>
+                <tr>
+                  <td><code>.shelled(wall, *, open, expect=None)</code></td>
+                  <td>A hollow solid to that wall thickness, with the faces <code>open</code> matches left
+                    off. <a href="#shell">More.</a></td>
                 </tr>
                 <tr>
                   <td><code>.fillet_now(pred, r)</code> <code>.chamfer_now(pred, d)</code></td>
@@ -5948,6 +6319,7 @@ hole(diameter, depth, *, at=None, axis=None, label=None)</code></pre>
 # faces       Planar  Cylindrical  Conical  SurfaceIs(name)
 #             FacingUp  FacingDown  Facing(v)  Highest  Lowest
 # either      Anything  Radius(q)  Diameter(q)  AtHeight(q)  OnFace(t)
+# swept       Swept  FromSegment(label)               # from a profile — see Profiles
 # named       TopFace  BottomFace  TopRim  BottomRim
 # combine     a & b     a | b     ~a   (also Not(a))</code></pre>
 
@@ -6152,11 +6524,11 @@ Quantity(value, "mm")                  # what a unit literal becomes</code></pre
     const DEC = '(?:\\d[\\d_]*(?:\\.[\\d_]*)?|\\.\\d[\\d_]*)';
     const INT = '\\d[\\d_]*';
     const NAMES = new Set(('Anything AtHeight BottomFace BottomRim Circular Conical Cylindrical Diameter Facing FacingDown '
-      + 'FacingUp Highest Horizontal Linear LongerThan Lowest Not OnFace OnOuterWire Planar Radius '
-      + 'ShorterThan SurfaceIs TopFace TopRim Touching Vertical box chamfer cone cylinder fillet '
-      + 'hex_prism hole DIN_912 DIN_934 DIN_985 ISO_7380 M10 M12 M2 M2_5 M3 M4 M5 M6 M8 bolt_hole '
-      + 'heat_insert nut_trap bed_face close free press Dim Quantity acos asin atan atan2 cos expect_dim '
-      + 'pi sin sqrt tan tau part use').split(' '));
+      + 'FacingUp FromSegment Highest Horizontal Linear LongerThan Lowest Not OnFace OnOuterWire Planar '
+      + 'Radius ShorterThan SurfaceIs Swept TopFace TopRim Touching Vertical box chamfer cone cylinder '
+      + 'fillet hex_prism hole profile DIN_912 DIN_934 DIN_985 ISO_7380 M10 M12 M2 M2_5 M3 M4 M5 M6 M8 '
+      + 'bolt_hole heat_insert nut_trap bed_face close free press Dim Quantity acos asin atan atan2 cos '
+      + 'expect_dim pi sin sqrt tan tau part use').split(' '));
     const KW = new Set(('False None True and as assert async await break class continue def del elif else except finally '
       + 'for from global if import in is lambda nonlocal not or pass raise return try while with yield').split(' '));
     /* slipfit:/vocabulary */
