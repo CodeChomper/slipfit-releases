@@ -1797,6 +1797,8 @@
         <a href="#anchors">Anchors</a>
         <a href="#profiles">Profiles, extrude and revolve</a>
         <a href="#combine">Combining shapes</a>
+        <a href="#mirror-patterns">Mirror and patterns</a>
+        <a href="#lettering">Lettering</a>
         <a href="#fitted">Cuts that leave room</a>
         <a href="#select">Choosing edges and faces</a>
         <a href="#shell">Hollowing out — shell</a>
@@ -1804,7 +1806,7 @@
         <a href="#compose">Using another file</a>
 
         <h4>Parts that fit</h4>
-        <a href="#hardware">Bolts, nuts and inserts</a>
+        <a href="#hardware">Bolts, nuts, inserts and threads</a>
         <a href="#calibrate">Calibration</a>
         <a href="#export">Export and print</a>
 
@@ -1959,11 +1961,11 @@
           <p>
             Worth knowing up front so you do not go hunting. In this version 0.5.0 there are no assemblies and no
             interference checking. No sweeps, lofts, splines, draft angles or offsets. No constraint solver — a
-            <a href="#profiles">profile's</a> dimensions are the code, not a drag — and no mirroring or patterns yet.
-            Version 1.0 is in the works to address some of these. Most of a part is solid blocks added together and
-            cut away — the way you would describe it to somebody over the phone — plus, now, a 2D outline drawn once
-            and swept into a solid for the rounded and revolved shapes a block alone cannot make. One file produces
-            one part, though it <a href="#compose">can be built out of several files</a>.
+            <a href="#profiles">profile's</a> dimensions are the code, not a drag. Version 1.0 is in the works to
+            address some of these. Most of a part is solid blocks added together and cut away — the way you would
+            describe it to somebody over the phone — plus a 2D outline drawn once and swept, mirrored or patterned
+            into the rounded, repeated and revolved shapes a block alone cannot make. One file produces one part,
+            though it <a href="#compose">can be built out of several files</a>.
           </p>
           <p>
             If you want to model an organic shape, use something else. If you want a bracket, a mount, an
@@ -3312,7 +3314,6 @@ KernelError: straddler lies on both sides of top.u
     nose radius            panel.slip:16      from segment
     profile(on=top)        panel.slip:15      applied to</code></pre>
 
-          <!-- REPLACE ME: <img src="images/profile-inspector.png" alt="…" width="1400" height="800" /> -->
           <figure class="shot">
             <img src="images/profile-inspector.png" alt="Profile extruded and shape inspected leads back to the line that made it." width="1400" height="800" />
             <figcaption>Profile extruded and shape inspected leads back to the line that made it.</figcaption>
@@ -3479,7 +3480,9 @@ part = plate.cut(cutter)</code></pre>
           <p>
             The result is identical either way; what changes is how long a rebuild takes, and you feel it
             the moment a part has a vent field or a honeycomb in it. The
-            <a href="#examples">enclosure lid example</a> does exactly this.
+            <a href="#examples">enclosure lid example</a> does exactly this. <a href="#mirror-patterns">A
+              pattern</a>, next but one, is the built-in version of that same loop — worth reaching for once
+            the inspector, not just the rebuild, starts to matter.
           </p>
 
           <h3><code>intersect</code>, for trimming to an outline</h3>
@@ -3491,6 +3494,233 @@ part = plate.cut(cutter)</code></pre>
 
           <pre class="file" data-name="disc.slip"><code class="slip">stock = box(40mm, 40mm, 3mm)
 part  = stock.intersect(cylinder(40mm, 3mm, at=(20mm, 20mm, 0mm)))   # a ⌀40 disc</code></pre>
+        </section>
+
+        <!-- ==================================================== MIRROR ======= -->
+        <section id="mirror-patterns">
+          <p class="sec-kicker">Writing a .slip</p>
+          <h2>Mirror and patterns</h2>
+          <p class="sub">Three ways to say "and another one of those" — a reflection, a row, and a ring — each
+            handing back an ordinary tool for <code>cut</code>, <code>fuse</code> or <code>intersect</code> to
+            take from there.</p>
+
+          <h3>Mirror</h3>
+          <pre class="file" data-name="arm.slip"><code class="slip">pair = arm.fuse(arm.mirrored(about=arm.left))    # 4084.38mm3, 12 faces</code></pre>
+          <p>
+            <code>about=</code> takes an anchor — an anchor already <em>is</em> a plane, so a mirror needs
+            no new kind of value — or a point on one, for a plane offset from a face rather than through it.
+          </p>
+          <p>
+            <strong>It hands back the copy rather than fusing it for you.</strong> A <code>mirrored</code>
+            that fused itself would be two operations wearing one name, and half the time the copy is not
+            what you actually want fused — a left-hand version of a part, or a tool mirrored before it cuts,
+            never touches the original at all.
+          </p>
+
+          <div class="note">
+            <span class="tag">A mirrored anchor keeps <code>u</code> and re-derives <code>v</code></span>
+            <p>A right-handed frame cannot survive a reflection with all three of its axes intact, so a
+              mirrored anchor keeps <code>u</code>, flips the normal, and works <code>v</code> out from the
+              two. The reading that holds on both sides is <em>both coordinates run inward from that face's
+                own near corner</em> — which is the same trade a box's <code>bottom</code> already makes
+              against its <code>top</code> (<a href="#anchors">anchors</a>). It is the one thing about a
+              mirrored copy worth knowing before it surprises you:</p>
+            <pre class="file" style="margin:12px 0 0"><code class="slip">arm.top.at(6mm, 6mm)          # (6, 6, 6)
+copy.top.at(6mm, 6mm)         # (-6, -6, 6), not (-6, 6, 6)</code></pre>
+          </div>
+
+          <!-- REPLACE ME: <img src="images/mirror-pair.png" alt="…" width="1400" height="800" />
+          <figure class="shot">
+            <div class="shot-ph">
+              <b>Image goes here</b>
+              <em>images/mirror-pair.png · 1400 × 800</em>
+              <span>An arm and its mirrored, fused copy in the viewport, both sets of anchors visible —
+                the original's arrows and the copy's, so the flipped <code>u</code> direction reads at a
+                glance rather than needing the coordinates spelled out.</span>
+            </div>
+            <figcaption>Two of the same part, reflected rather than redrawn.</figcaption>
+          </figure> -->
+
+          <h3>Patterns</h3>
+          <pre class="file" data-name="plate.slip"><code class="slip">vents = pattern(vent, count=4, spacing=15mm, along=plate.top.u)
+ring  = polar_pattern(slot, count=6, about=hub.top.axis)
+part  = plate.cut(vents)</code></pre>
+          <p>
+            The first copy is the tool exactly where you already built it, so <code>count=4</code> means the
+            tool plus three more — a negative <code>spacing</code> runs the row the other way along the
+            axis, and a grid is two patterns, one along each direction. A polar pattern divides a full turn
+            by the count; there is no way to spread six copies over 90° instead of a whole revolution,
+            because "over 90°" has two defensible readings — spread across the angle, or stepped by it — and
+            a syntax that could mean either is exactly the wrong-but-confident failure this tool is built to
+            refuse. A loop is how you write that until the argument that would settle it exists.
+          </p>
+
+          <p>
+            <code>along</code> and <code>about</code> take an <code>Axis</code> — the line type
+            <a href="#profiles">extrude and revolve</a> already introduced. A frame offers three lines
+            through its origin: <code>.u</code> and <code>.v</code>, which a revolve turns an outline about,
+            and now <code>.axis</code>, running along the face's own normal, which is what a ring of copies
+            turns about. <code>plate.top.at(30mm, 20mm).axis</code> is the same normal through a point on
+            the plane, alongside the <code>.u_axis</code> from before.
+          </p>
+
+          <p>
+            A pattern hands back the copies as <strong>one tool, with no anchors</strong> — every frame the
+            original declared now exists <code>count</code> times over, and there is no single answer to
+            <em>which one</em>. That is exactly the shape <a href="#combine">cut, fuse and intersect</a>
+            already expect, so nothing new is needed to use the result.
+          </p>
+
+          <div class="note">
+            <span class="tag">Copies are fused together first</span>
+            <p>A shape whose parts overlap is not a valid argument to a boolean, and OCCT will not tell you
+              so: a ring of copies turned about its own tool's centreline, every copy landing on the last,
+              fused straight into a plate gave a solid of <strong>zero volume</strong> and reported success.
+              Overlapping copies are an ordinary thing to want, so <code>pattern</code> and
+              <code>polar_pattern</code> fuse their own copies before handing the tool over. Copies that
+              merely touch keep their own faces — a plain fuse merges no coplanar faces — and copies that
+              coincide collapse into faces belonging to all of them rather than none.</p>
+          </div>
+
+          <h3>What a bad pattern tells you</h3>
+          <pre class="msg bad"><code>KernelError: pattern() count must be at least 1, got 0
+  = a pattern of no copies is not a pattern of nothing, it is nothing
+
+KernelError: pattern() spacing must not be zero, got 0mm
+  = every copy would land on the one before it
+
+KernelError: polar_pattern(about=…) needs an axis, not Anchor
+  = pass a line to turn the copies about, such as hub.top.axis or plate.top.at(30mm, 20mm).axis</code></pre>
+
+          <h3>Why reach for one when a loop already works</h3>
+          <p>
+            A pattern builds <em>nothing</em> a <code>for</code> loop cannot — every shape it makes, a loop
+            already makes too. What it changes is the inspector, and that is the entire argument for using
+            one. Four looped cuts are four operations on four lines, and identical operations are
+            deliberately never collapsed into one, so clicking the third hole in a looped vent field gives a
+            chain that names the third cut and tells you nothing you did not already know. A pattern gives
+            one entry, with the copy's index underneath it:
+          </p>
+          <pre class="msg"><code>click the third hole
+▸ cut(pattern(4 × 15mm))   plate.slip:13      modified
+  pattern(4 × 15mm)        plate.slip:12      modified
+      copy 3 of 4
+    vent                   plate.slip:11      created
+  plate                    plate.slip:10      applied to</code></pre>
+          <p>
+            That index rides on the <em>face</em> the pattern produced, not on the operation, which is what
+            lets it survive the boolean that consumes the tool — the chain above is read off the finished
+            part, not off the pattern by itself.
+          </p>
+
+          <!-- REPLACE ME: <img src="images/pattern-inspector.png" alt="…" width="1400" height="800" />
+          <figure class="shot">
+            <div class="shot-ph">
+              <b>Image goes here</b>
+              <em>images/pattern-inspector.png · 1400 × 800</em>
+              <span>A plate with a four-vent pattern cut into it, the third vent clicked: the inspector's
+                chain shows "copy 3 of 4" under the pattern entry, and that one vent lit in the viewport
+                while the other three stay dim.</span>
+            </div>
+            <figcaption>One entry, with the copy named — not the fourth click of "which line was that one
+              again".</figcaption>
+          </figure> -->
+        </section>
+
+        <!-- ==================================================== LETTERING ==== -->
+        <section id="lettering">
+          <p class="sec-kicker">Writing a .slip</p>
+          <h2>Lettering</h2>
+          <p class="sub">A part number on a bracket, a size on a lid, an arrow on a housing. A letter is a profile,
+            like any other — this is <code>.extruded()</code> and a boolean you already know, with a font doing the
+            drawing for you.</p>
+
+          <pre class="file" data-name="plate.slip"><code class="slip">label = text("SLIPFIT M3", height=5mm, on=plate.top.at(6mm, 4mm))
+
+sunk   = plate.cut(label.extruded(-0.6mm))     # 10737.28mm3, 116 faces
+raised = plate.fuse(label.extruded(0.6mm))     # 10862.72mm3, 116 faces</code></pre>
+
+          <p>
+            Debossing is a cut, embossing is a fuse, and there is no third thing to learn. <code>text()</code>
+            adds nothing new to the kernel — a glyph is an outline in the anchor's own frame exactly like a
+            hand-drawn <a href="#profiles">profile</a>, so everything that section already said about
+            extrude, revolve and provenance applies to a letter too.
+          </p>
+
+          <!-- REPLACE ME: <img src="images/lettering-demo.png" alt="…" width="1400" height="800" />
+          <figure class="shot">
+            <div class="shot-ph">
+              <b>Image goes here</b>
+              <em>images/lettering-demo.png · 1400 × 800</em>
+              <span>A plate with "SLIPFIT M3" debossed into it on one half and raised on the other, in the
+                viewport, next to the two-line <code>text()</code> and <code>.extruded()</code> chain that
+                made each.</span>
+            </div>
+            <figcaption>The same string, cut in on the left and fused on on the right — one call to
+              <code>text()</code>, two ways to use what it returns.</figcaption>
+          </figure> -->
+
+          <h3>Reading that out loud</h3>
+          <div class="gloss">
+            <dl>
+              <dt>height=5mm</dt>
+              <dd><strong>Cap height</strong> — the height of a capital letter, which is the number a
+                caliper on the printed part actually reports. Ascenders reach above it and descenders below,
+                because that is what the letterforms do; asking for 5mm and measuring 3.5mm is exactly the
+                kind of number this tool refuses to produce anywhere else.</dd>
+              <dt>on=plate.top.at(6mm, 4mm)</dt>
+              <dd>Where the <strong>baseline starts</strong>. Two strings set on the same anchor sit on the
+                same line whether or not either has a descender in it. <code>label.width</code> is the width
+                the string was <em>set</em> in — advances included — a little wider than the ink itself.</dd>
+            </dl>
+          </div>
+
+          <div class="note">
+            <span class="tag">One face ships with the tool, and it is the default</span>
+            <p><code>Aileron Black</code>, by Sora Sagano (dotcolon.net), released under CC0 1.0 — named in
+              the export report, under <em>data this model used</em>. A bundled face is not a convenience:
+              a system font would make the same <code>.slip</code> produce different geometry on different
+              machines, for a reason that has nothing to do with your workshop, which is exactly the
+              distinction a <a href="#calibrate">printer profile</a> exists to protect. <code>font=</code>
+              takes a path to a face of your own — <code>.otf</code> or <code>.ttf</code> — and that file
+              then joins the model's dependencies, watched for edits and disclosed the same as everything
+              else the model reads.</p>
+          </div>
+
+          <h3>Counters, spacing and alignment</h3>
+          <p>
+            A letter with a counter — <code>O</code>, <code>A</code>, <code>8</code> — is one profile with a
+            hole in it. A letter drawn in two pieces, like <code>i</code>, is two profiles. Both extrude and
+            both fuse into the one solid the boolean takes, so neither needs anything special from you:
+          </p>
+          <pre class="file" data-name="lettering"><code class="slip">text("O", height=8mm, on=plate.top)     # 1 profile, 2 wires
+text("i", height=8mm, on=plate.top)     # 2 profiles, 1 wire each
+
+text("M3", height=5mm, on=lid.top.at(0mm, 0mm), align="centre")
+text("SPACED", height=5mm, on=plate.top, spacing=0.5mm)</code></pre>
+          <p>
+            <code>align</code> is <code>"left"</code> (the default), <code>"centre"</code> or
+            <code>"right"</code>, and says where the point you gave sits along the string.
+            <code>spacing</code> tracks the whole string apart.
+          </p>
+          <div class="note warn">
+            <span class="tag">Kerning is not applied</span>
+            <p>Worth knowing rather than discovering: glyphs are laid out on the advance widths the face
+              specifies, not on the pair-by-pair spacing a proper shaping engine would read. Reading that
+              properly is the wrong dependency to add for setting four words on a bracket. If a pair looks
+              loose, <code>spacing=</code> moves all of them, and two separate <code>text()</code> calls
+              move just one.</p>
+          </div>
+
+          <h3>Which letter drew this wall</h3>
+          <p>Selection reaches lettering exactly the way it reaches any other swept wall:</p>
+          <pre class="file" data-name="selecting"><code class="slip">sunk.faces(FromSegment("glyph 'S'"))     # 14 faces</code></pre>
+          <p>
+            Every segment of one glyph carries the same label and the same source line — the honest answer,
+            since nobody wrote a line for the curve of the <code>S</code>, they wrote the <code>text()</code>
+            call. The inspector collapses a whole string into one entry for the same reason: clicking a
+            letter names the call that set it, not a curve index inside a font you did not draw.
+          </p>
         </section>
 
         <!-- ==================================================== FITTED ======= -->
@@ -4089,7 +4319,6 @@ plate.edges(Vertical, expect=3)     # SelectionError: expected 3 edges, matched 
               new operation. What <code>shelled</code> is for is the opening.</p>
           </div>
 
-          <!-- REPLACE ME: <img src="images/shell-xray.png" alt="…" width="1400" height="800" /> -->
           <figure class="shot">
             <img src="images/shell-xray.png" alt="A shelled case with X-ray turned on so you can see the floor of the opening" width="1400" height="800" />
             <figcaption>The same question X-ray already answers for a cut - “did that actually happen” -
@@ -4641,8 +4870,8 @@ IncludeError: standoff.slip defines no `part`
         <!-- ==================================================== HARDWARE ===== -->
         <section id="hardware">
           <p class="sec-kicker">Parts that fit</p>
-          <h2>Bolts, nuts and inserts</h2>
-          <p class="sub">Three words that say what goes in the hole, and let the millimetres be decided later.</p>
+          <h2>Bolts, nuts, inserts and threads</h2>
+          <p class="sub">Words that say what goes in the hole, and let the millimetres be decided later.</p>
 
           <pre class="file" data-name="bracket.slip"><code class="slip">bed_face(plate.bottom)
 
@@ -4683,6 +4912,12 @@ part = plate.add(
                   <td><code>heat_insert</code></td>
                   <td>A pocket, plus a raised boss if you ask for one.</td>
                   <td>The insert's outside diameter.</td>
+                </tr>
+                <tr>
+                  <td><code>thread</code></td>
+                  <td>A tapping bore and a lead-in chamfer — or, with <code>external=True</code>, the male
+                    half cut on a boss you have already made. <a href="#threads">More, below.</a></td>
+                  <td>Major and minor diameter together, by <code>fit</code>.</td>
                 </tr>
               </tbody>
             </table>
@@ -4862,14 +5097,67 @@ part = plate.add(
             much material is under that point. A boss you did not ask for is a confidently wrong answer; a
             missing one is visible immediately.
           </p>
+
+          <h3 id="threads">Threads</h3>
+          <pre class="file" data-name="parts.slip"><code class="slip">lid = lid.add(thread(M8, at=lid.top.at(0mm, 0mm), depth=12mm, fit=free))
+peg = peg.add(thread(M8, at=peg.top.at(0mm, 0mm), depth=10mm, external=True))</code></pre>
+          <p>
+            A tapped hole by default. <code>external=True</code> cuts the male half instead, onto a boss
+            you have already built at the major diameter — one word turning the same call from a nut to a
+            bolt, rather than a second feature to learn. <code>pitch=</code> defaults to the size's coarse
+            pitch, the one in the drawer, and <code>depth</code> is required in practice: a thread run all
+            the way through a part is rarely what was meant, and is refused with its turn count once it
+            would run past two hundred turns.
+          </p>
+
+          <!-- REPLACE ME: <img src="images/thread-demo.png" alt="…" width="1400" height="800" />
+          <figure class="shot">
+            <div class="shot-ph">
+              <b>Image goes here</b>
+              <em>images/thread-demo.png · 1400 × 800</em>
+              <span>A lid with an internal M8 thread beside a peg with the matching external one, both in
+                the viewport with the helical flanks visible — ideally sectioned or X-rayed so the tapped
+                hole reads as threaded rather than as a plain bore.</span>
+            </div>
+            <figcaption>The same call, the same gauge, read from the other side with <code>external=True</code>.</figcaption>
+          </figure> -->
+
+          <p>
+            <strong>The geometry is ISO 68-1's basic profile, derived from the pitch</strong> rather than
+            read off a table — <code>H = P·√3/2</code>, minor diameter <code>D1 = D − 1.0825·P</code>, 60°
+            flanks, a flat crest — so the minor diameters it cuts reproduce ISO 262's published figures
+            instead of risking a second, hand-copied version of the same standard that could quietly
+            disagree with it. Right-hand, single start, no runout: each absent rather than approximated.
+          </p>
+          <p>
+            <code>fit</code> works exactly as it does everywhere else, moving major and minor together so
+            the flank angle itself is untouched — a fit opens a tapped hole and shrinks a male thread by the
+            same number, because the material has to leave the same clearance either way. The number comes
+            from the <a href="#calibrate">thread gauge</a>; until one has been printed for that size, a
+            thread cuts at nominal, reported the same way any other ungauged dimension is.
+          </p>
+
+          <div class="note">
+            <span class="tag">A hundred helical faces, one line in the chain</span>
+            <p>Underneath, a thread is a helical sweep no <code>.slip</code> can name directly — the same
+              arrangement <code>fit=</code> already uses behind an ordinary <code>cut()</code>. A tapped hole
+              is a hundred small faces in the raw geometry, and every one of them resolves to the
+              <code>thread()</code> call rather than to anything inside the sweep:</p>
+            <pre class="msg" style="margin:12px 0 0"><code>▸ internal thread  M8 × 1.25mm      case.slip:22
+    major   ⌀8.00mm  minor ⌀6.65mm
+    tapping bore   ⌀6.65mm
+    depth   12mm (9.6 turns at 1.25mm)
+    lead-in chamfer   0.6mm</code></pre>
+          </div>
         </section>
 
         <!-- ==================================================== CALIBRATE ==== -->
         <section id="calibrate">
           <p class="sec-kicker">Parts that fit</p>
           <h2>Calibration</h2>
-          <p class="sub">Print three small gauges, push real hardware into them, and click the step that fitted. About
-            40 minutes of printing, once, and then never again for that printer.</p>
+          <p class="sub">Print three small gauges — four if you plan to cut a thread — push real hardware into them,
+            and click the step that fitted. About 40 minutes of printing for the first three, once, and then never
+            again for that printer.</p>
 
           <p>
             Slipfit calibrates by <strong>fit gauge, not by caliper</strong>. Measuring a printed hole with
@@ -4915,7 +5203,7 @@ part = plate.add(
                 </tr>
                 <tr>
                   <td><strong>Gauges</strong></td>
-                  <td>The three strips, with a print estimate each. Writes them, and takes your answer.</td>
+                  <td>The four strips, with a print estimate each. Writes them, and takes your answer.</td>
                 </tr>
                 <tr>
                   <td><strong>Compensation in this build</strong></td>
@@ -4965,6 +5253,11 @@ part = plate.add(
                 You need a few of each, plus a soldering iron with an insert tip for the third gauge. Any M3
                 cap screw will do. Nyloc nuts are the same across the flats as plain ones, so the nut gauge
                 still measures the right thing.
+              </p>
+              <p>
+                A thread gauge needs no drawer entry of its own — it measures the tapping itself, against a
+                real bolt in whatever size you actually plan to cut. Pick that size in the same
+                <strong>Hardware</strong> panel the insert uses, next.
               </p>
             </li>
 
@@ -5093,18 +5386,18 @@ part = plate.add(
             <li>
               <h3>Write the gauges and print them</h3>
               <p>
-                The <strong>Gauges</strong> section already describes all three before you build anything —
+                The <strong>Gauges</strong> section already describes all four before you build anything —
                 name, print estimate, the stations and the question each one asks. Press
                 <strong>Write gauges to exports/</strong> and it builds them and tells you where each
                 landed.
               </p>
 
-              <!-- REPLACE ME: <img src="images/calibration-gauges.png" alt="…" width="1400" height="620" /> 
+              <!-- REPLACE ME: <img src="images/calibration-gauges.png" alt="…" width="1400" height="620" />
               <figure class="shot">
                 <div class="shot-ph">
                   <b>Image goes here</b>
                   <em>images/calibration-gauges.png · 1400 × 620</em>
-                  <span>The Gauges section: three blocks, each with its name, its estimate, a row of station buttons,
+                  <span>The Gauges section: four blocks, each with its name, its estimate, a row of station buttons,
                     its question, and the <code>wrote …</code> line under it after writing.</span>
                 </div>
                 <figcaption>The stations are greyed out until a profile exists — there would be nowhere to record an
@@ -5136,10 +5429,15 @@ part = plate.add(
                       <td class="num">75.6 × 14.6 × 8.7mm</td>
                       <td class="num">~20 min, 11.3 g</td>
                     </tr>
+                    <tr>
+                      <td>M8 thread (free)</td>
+                      <td class="num">6 tapped holes, one strip</td>
+                      <td class="num">~39 min, 22 g (estimated)</td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
-              <p>Those times come from an assumed flow rate, not a measurement — they are there to order the three by
+              <p>Those times come from an assumed flow rate, not a measurement — they are there to order the four by
                 cost. Your slicer's number is the real one.</p>
 
               <div class="note warn">
@@ -5148,14 +5446,28 @@ part = plate.add(
                   height, nozzle temperature, speeds, flow and filament. A gauge printed at 0.2mm and parts
                   printed at 0.28mm have measured a machine you are not using.</p>
                 <p>Print them <strong>flat, as exported</strong> — do not rotate them. No supports, no
-                  scaling. Brim is fine. Print all three in one session on the same spool if the bed allows.</p>
+                  scaling. Brim is fine. Print all four in one session on the same spool if the bed allows.</p>
               </div>
+
+              <!-- REPLACE ME: <img src="images/thread-gauge-strip.png" alt="…" width="1400" height="800" />
+              <figure class="shot">
+                <div class="shot-ph">
+                  <b>Image goes here</b>
+                  <em>images/thread-gauge-strip.png · 1400 × 800</em>
+                  <span>The M8 thread gauge strip: six tapped holes in a row, tally-notched, with an M8 bolt
+                    part-way turned into one of them — the same treatment as the bolt-clearance strip photo
+                    above, for the fourth gauge.</span>
+                </div>
+                <figcaption>Six tapped holes, six turns of a real bolt. None of it is measured until one binds.</figcaption>
+              </figure> -->
 
               <div class="note">
                 <span class="tag">Waiting on the panel</span>
-                <p>Describing all three gauges takes a second or two the first time you open the sheet for a
-                  size, and is instant every time after that. If it sits there longer than that, something is
-                  wrong rather than slow.</p>
+                <p>Describing the first three gauges takes a second or two the first time you open the sheet
+                  for a size, and is instant every time after that. The thread gauge costs more, in every
+                  sense — about fourteen seconds to build even the first time, because estimating it means
+                  building the solid, and a longer print besides. That is the fourth family's real price,
+                  not a bug in the panel.</p>
               </div>
             </li>
 
@@ -5207,6 +5519,13 @@ part = plate.add(
                       <td>Which is the first that goes in square without bulging the wall?</td>
                       <td>Enters square, stops flush, no swelling or cracking, and will not spin when you nip a bolt up
                         in it.</td>
+                    </tr>
+                    <tr>
+                      <td>Thread</td>
+                      <td>Turn a bolt into each by hand — which is the first it runs all the way through without
+                        binding?</td>
+                      <td>Threads on with finger pressure alone, no wrench, and turns freely to the bottom. Fights
+                        back at any point and it is too tight.</td>
                     </tr>
                   </tbody>
                 </table>
@@ -6210,7 +6529,8 @@ cylinder(diameter, height, *, at=None, axis=(0,0,1), label=None)
 cone(diameter, top_diameter, height, *, at=None, axis=(0,0,1), label=None)
 hex_prism(across_flats, height, *, at=None, axis=(0,0,1), rotation=None, label=None)
 hole(diameter, depth, *, at=None, axis=None, label=None)
-profile(on=anchor_or_position, *, label=None)</code></pre>
+profile(on=anchor_or_position, *, label=None)
+text(string, height, *, on, align="left", spacing=0mm, font=None)   # a profile source, see Lettering</code></pre>
 
           <h3>Drawing and sweeping a <a href="#profiles">profile</a></h3>
           <div class="tbl">
@@ -6245,8 +6565,30 @@ profile(on=anchor_or_position, *, label=None)</code></pre>
               </tbody>
             </table>
           </div>
-          <pre><code class="slip">plate.top.u   plate.top.v                       # the two axis lines through an anchor's origin
-plate.top.at(20mm, 0mm).u_axis                   # the same line through a point on it</code></pre>
+          <pre><code class="slip">plate.top.u   plate.top.v   plate.top.axis     # the three lines through an anchor's origin
+plate.top.at(20mm, 0mm).u_axis                   # the u line, through a point on it instead
+plate.top.at(20mm, 0mm).axis                     # the normal, through that same point</code></pre>
+
+          <h3>Mirror and patterns</h3>
+          <pre><code class="slip">pattern(tool, *, count, spacing, along)          # a row of copies, as one tool
+polar_pattern(tool, *, count, about)             # a ring of copies, dividing a full turn</code></pre>
+          <div class="tbl">
+            <table>
+              <thead>
+                <tr>
+                  <th>Member</th>
+                  <th>Gives</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>.mirrored(about)</code></td>
+                  <td>The reflected copy — <code>about</code> is an anchor or a point on one.
+                    <a href="#mirror-patterns">More.</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
           <h3>Working with a solid</h3>
           <div class="tbl">
@@ -6327,6 +6669,7 @@ plate.top.at(20mm, 0mm).u_axis                   # the same line through a point
           <pre><code class="slip">bolt_hole(size, *, at, fit=free, depth=None)
 nut_trap(size, *, at, clearance=…, lead_in=…, bolt=True, fit=free)
 heat_insert(size, *, at, boss=False, wall=1.2mm, clearance=…)
+thread(size, *, at, depth, pitch=None, fit=free, external=False)
 
 bed_face(anchor)                       # which face goes on the bed
 free  close  press                     # the three fits
@@ -6526,9 +6869,9 @@ Quantity(value, "mm")                  # what a unit literal becomes</code></pre
     const NAMES = new Set(('Anything AtHeight BottomFace BottomRim Circular Conical Cylindrical Diameter Facing FacingDown '
       + 'FacingUp FromSegment Highest Horizontal Linear LongerThan Lowest Not OnFace OnOuterWire Planar '
       + 'Radius ShorterThan SurfaceIs Swept TopFace TopRim Touching Vertical box chamfer cone cylinder '
-      + 'fillet hex_prism hole profile DIN_912 DIN_934 DIN_985 ISO_7380 M10 M12 M2 M2_5 M3 M4 M5 M6 M8 '
-      + 'bolt_hole heat_insert nut_trap bed_face close free press Dim Quantity acos asin atan atan2 cos '
-      + 'expect_dim pi sin sqrt tan tau part use').split(' '));
+      + 'fillet hex_prism hole pattern polar_pattern profile DIN_912 DIN_934 DIN_985 ISO_7380 M10 M12 M2 '
+      + 'M2_5 M3 M4 M5 M6 M8 bolt_hole heat_insert nut_trap text thread bed_face close free press Dim '
+      + 'Quantity acos asin atan atan2 cos expect_dim pi sin sqrt tan tau part use').split(' '));
     const KW = new Set(('False None True and as assert async await break class continue def del elif else except finally '
       + 'for from global if import in is lambda nonlocal not or pass raise return try while with yield').split(' '));
     /* slipfit:/vocabulary */
