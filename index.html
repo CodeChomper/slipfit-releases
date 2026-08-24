@@ -2215,7 +2215,8 @@
                 </tr>
                 <tr>
                   <td><span class="kbd">M</span></td>
-                  <td>Measure between two picks. <a href="#section-view">More, below.</a></td>
+                  <td>Measure: pin dimensions onto the part, one after another. <a href="#section-view">More,
+                      below.</a></td>
                 </tr>
                 <tr>
                   <td><span class="kbd">Esc</span></td>
@@ -6181,6 +6182,8 @@ correction: +0.05</code></pre>
               <div style="padding-top:4px"><span class="chip">3MF — plain, geometry only…</span></div>
               <div style="padding-top:4px"><span class="chip">STL — binary…</span></div>
               <div style="padding-top:4px"><span class="chip">STEP — as designed…</span></div>
+              <div style="padding-top:8px; margin-top:4px; border-top:1px solid var(--border)"></div>
+              <div style="padding-top:8px"><span class="chip">Annotated view (PNG)…</span></div>
             </div>
           </div>
 
@@ -6580,6 +6583,44 @@ correction: +0.05</code></pre>
             itself wrote. Units are always explicit millimetres, whatever unit a reader might otherwise
             assume.
           </p>
+
+          <h3>Annotated view — a picture, not a mesh</h3>
+          <p>
+            <strong>File ▸ Export ▸ Annotated view (PNG)…</strong>, behind a separator from the geometry
+            formats above it, because it is not one of them. Every export above writes the B-rep your file
+            built — compensated or not, as designed or as printed. This one writes a photograph of the
+            <strong>canvas</strong>: whatever is on screen right now, including any pins you placed with
+            <a href="#section-view">Measure</a>, at exactly the size the viewport is.
+          </p>
+          <p>
+            That is the whole difference from everything above it, and the point of it: run it again a
+            minute later, after dragging a pin or turning the model, and you get a different file. Nothing is
+            rebuilt to make it — the selected pin and whatever face the cursor is hovering are cleared first,
+            so neither lands in the picture, and then the screen is what gets saved.
+          </p>
+          <pre class="msg"><code>Export › Annotated view (PNG)
+✓ wrote bracket-view.png    1400 × 900</code></pre>
+
+          <!-- REPLACE ME: <img src="images/annotated-export.png" alt="…" width="1400" height="800" /> -->
+          <figure class="shot">
+            <div class="shot-ph">
+              <b>Image goes here</b>
+              <em>images/annotated-export.png · 1400 × 800</em>
+              <span>The PNG a bracket export actually wrote, opened in an image viewer: the part on a plain
+                background with six dimension pins standing on it, no cursor, no selection highlight and no
+                app chrome around it — just the viewport's own pixels.</span>
+            </div>
+            <figcaption>Nothing about this file can be edited afterwards, which is why it is the size the
+              viewport was and nothing else.</figcaption>
+          </figure>
+
+          <div class="note">
+            <span class="tag">For a shop, not a slicer</span>
+            <p>This is the file that answers "will this fit" for somebody who is not going to print it and
+              does not have Slipfit — a client signing off a bracket, a shop quoting a job. Nothing here is
+              compensated for a printer; it is exactly what <a href="#section-view">Measure</a> put on
+              screen, nominal or as-printed depending on what <strong>showing</strong> was set to.</p>
+          </div>
         </section>
 
         <!-- ==================================================== INSPECT ===== -->
@@ -6688,7 +6729,8 @@ showing [● kobra-s1-0.4 · PLA ▾]       hole 3.20mm    as printed</code></pr
           <p class="sec-kicker">Reading your model</p>
           <h2>Section view and measuring</h2>
           <p class="sub">Two ways of looking, for the question a shelled part always raises: what does the
-            inside actually look like, and how big is it really?</p>
+            inside actually look like, how big is it really, and how do you put those numbers in front of
+            somebody who does not have Slipfit?</p>
 
           <h3>Section — <span class="kbd">S</span></h3>
           <p>
@@ -6749,64 +6791,98 @@ showing [● kobra-s1-0.4 · PLA ▾]       hole 3.20mm    as printed</code></pr
 
           <h3>Measure — <span class="kbd">M</span></h3>
           <p>
-            Pick two faces and get an exact number, off the real surfaces rather than the mesh drawn on
-            screen — a ⌀8 bore reads <strong>8.000mm</strong>, not the 7.98 a triangle mesh at viewport
-            resolution would give. That is the whole reason it is a round trip to the worker instead of an
-            instant on-screen readout: a click can afford to wait a beat for an exact answer, and a drag —
-            which is what the section plane is — cannot.
+            Pick faces and get exact numbers pinned onto the part, off the real surfaces rather than the mesh
+            drawn on screen — a ⌀8 bore reads <strong>8.000mm</strong>, not the 7.98 a triangle mesh at
+            viewport resolution would give. That is the whole reason a pin is a round trip to the worker
+            instead of an instant on-screen readout: a click can afford to wait a beat for an exact answer,
+            and a drag — which is what the section plane is — cannot.
           </p>
 
-          <pre class="msg"><code>M  ·  pick the first face
-M  ·  pick the second
-   6mm   parallel</code></pre>
+          <p>
+            <span class="kbd">M</span>, or <strong>View ▸ Measure</strong>, turns the mode on rather than
+            taking one measurement — it carries a checkmark, the same way X-ray and Section do, and stays on
+            until you turn it off again. A part worth explaining to somebody else usually needs six or eight
+            numbers on it at once, not one, so placing a pin re-arms the mode instead of ending it.
+          </p>
 
           <div class="tbl">
             <table>
               <thead>
                 <tr>
-                  <th>You picked</th>
+                  <th>You do</th>
                   <th>You get</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>Any two faces</td>
-                  <td>The distance between the nearest points, always — with a line drawn over the part
+                  <td>Pick two faces</td>
+                  <td>A pin on the distance between the nearest points, with a line drawn over the part
                     connecting them, so a surprising number has a witness rather than nothing to check it
                     against.</td>
                 </tr>
                 <tr>
-                  <td>Two <em>planar</em> faces</td>
-                  <td>The angle between them too — <code>parallel</code> is what two faces of a wall report,
-                    which makes the distance a thickness rather than an arbitrary gap.</td>
+                  <td>Pick two <em>planar</em> faces</td>
+                  <td>The angle too — <code>parallel</code> is what two faces of a wall report, which reads
+                    the distance as a thickness rather than an arbitrary gap.</td>
                 </tr>
                 <tr>
-                  <td>Exactly one cylinder</td>
-                  <td>Its diameter as well. Two cylinders report neither — two radii and one field cannot say
-                    which is which, so it says nothing rather than guessing.</td>
+                  <td>Pick one face, then <span class="kbd">Enter</span></td>
+                  <td>A single pin on its own size — ⌀ on a bore, R on a fillet. A flat face has neither and
+                    refuses rather than pinning a zero.</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <!-- REPLACE ME: <img src="images/measure-tool.png" alt="…" width="1400" height="700" /> -->
+          <pre class="msg"><code>M             measure mode on — checkmark on the View menu
+click         the bore's wall
+Enter         ⌀6mm pinned
+click         the plate's top
+click         the plate's bottom
+              8mm pinned, parallel — still in measure mode</code></pre>
+
+          <div class="note">
+            <span class="tag">Ambiguous cases read as a bore, not a fillet</span>
+            <p>A face can point back at its own axis two ways, and where that is genuinely unclear the pin
+              reads ⌀ rather than R. A fillet mislabelled ⌀ is a misprint a shop will catch by eye; a bore
+              mislabelled R is a part machined to half the size it needs — the two mistakes are not equally
+              bad, so the tie-break favours the one that is merely embarrassing.</p>
+          </div>
+
+          <!-- REPLACE ME: <img src="images/measure-tool.png" alt="…" width="1400" height="800" /> -->
           <figure class="shot">
             <div class="shot-ph">
               <b>Image goes here</b>
-              <em>images/measure-tool.png · 1400 × 700</em>
-              <span>Two picked faces on a bracket — a bolt hole's rim and the opposite wall — with the
-                measured segment drawn between the nearest points and a readout reading "6mm · parallel"
-                near the cursor.</span>
+              <em>images/measure-tool.png · 1400 × 800</em>
+              <span>A bracket with six pins standing at once — plate width, wall thickness, two bore
+                diameters, a fillet radius and a distance between two holes — each drawn as a dimension line
+                with an arrowhead at each end and a label sitting clear of the part.</span>
             </div>
-            <figcaption>A distance with no line drawn under it is unreadable the moment it surprises you.</figcaption>
+            <figcaption>Six or eight pins is the normal case, not the edge case — a part worth explaining
+              usually needs several numbers on it at once.</figcaption>
           </figure>
 
+          <h3>Moving a pin, and losing one on purpose</h3>
+          <p>
+            Click a pin to select it. <span class="kbd">↑</span> <span class="kbd">↓</span> <span
+              class="kbd">←</span> <span class="kbd">→</span> nudge it, dragging moves it by hand, and <span
+              class="kbd">Delete</span> removes it. <span class="kbd">Esc</span> drops the selection before
+            it does anything else.
+          </p>
+          <p>
+            A label only slides <strong>square to what it measures</strong> — further out, or sideways along
+            the part — never at some stray in-between angle where it would stop reading as a straight
+            dimension line. That is a smaller freedom than a free drag, on purpose: a number standing off at
+            37° reads as a mistake, not as a placement choice.
+          </p>
+
           <div class="note">
-            <span class="tag">The mode ends itself</span>
-            <p>Two picks and it is done — there is nothing to switch off afterwards. A mode you have to
-              remember to leave is one that eats the next click you meant for something else. Rebuilding the
-              part cancels a measurement in progress, because face ids are reissued on every rebuild and
-              answering off a stale one would be confident about the wrong surface.</p>
+            <span class="tag">A displayed number is never stale</span>
+            <p>Every pin is re-checked against the model on every rebuild, not merely redrawn. Edit the hole a
+              pin sits on and its number moves with it; delete the feature it was measuring and the pin goes
+              rather than pointing at nothing, with the status line saying how many were dropped. A pin is
+              never <em>restored</em> across a rebuild — it is re-resolved, so what is on screen is either
+              correct or gone, and never a leftover guess.</p>
           </div>
 
           <div class="note">
@@ -6814,6 +6890,14 @@ M  ·  pick the second
             <p>Pick a named frame instead of a face and it measures as a vertex at its origin — an anchor is
               a declared point rather than geometry, and "how far is this surface from that frame" is the
               honest reading of the question a pick on one raises.</p>
+          </div>
+
+          <div class="note">
+            <span class="tag">Not a drawing tool</span>
+            <p>There is no sheet, no paper size, no title block and no second view — one viewport with pins
+              on it, exported as one picture. Pins live for the session, the same as X-ray and Section:
+              closing the file drops them, and none of it is written into the <code>.slip</code>. When a
+              dimensioned view needs to leave the window, <a href="#export">export it as a picture</a>.</p>
           </div>
         </section>
 
