@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Support Slipfit — back a one-person project</title>
+  <meta name="description"
+    content="Slipfit is built by one person for the 3D-printing community. Tips go straight into test printers, filament, code-signing, and the fees that come with shipping software." />
+  <meta name="theme-color" content="#080808" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Support Slipfit" />
+  <meta property="og:description"
+    content="One developer, one workshop, your printer. Chip in for hardware, filament, and signing fees." />
+  <meta property="og:image" content="images/AppDemo.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ==========================================================================
+   CodeChomper design system — tokens (shared with index.html)
+   Dark by design. Near-black with one working accent; there is no light
+   variant. Green = measured, correct, the thing that fits; orange = warned.
+   ========================================================================== */
+    :root {
+      /* color */
+      --background: #080808;
+      --bg-surface: #111111;
+      --bg-elevated: #1a1a1a;
+      --foreground: #dddddd;
+      --muted-foreground: #888888;
+      --border: #2a2a2a;
+      --primary: #8cc641;
+      --primary-foreground: #080808;
+      --accent: #bf4e30;
+      --dark-green: #5e772c;
+
+      --measured: var(--primary);
+      --warned: var(--accent);
+
+      /* type */
+      --font-primary: "Archivo Black", Impact, "Arial Black", sans-serif;
+      --font-secondary: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+      --tracking-label: 2px;
+      --tracking-section: 3px;
+
+      /* spacing */
+      --s-xs: 4px;
+      --s-s: 8px;
+      --s-m: 16px;
+      --s-l: 24px;
+      --s-xl: 32px;
+      --s-xxl: 48px;
+
+      /* radius — sharp by design */
+      --radius-none: 0px;
+      --radius-m: 2px;
+      --radius-pill: 4px;
+
+      /* layout */
+      --nav-h: 64px;
+      --measure: 62rem;
+      --main-pad: 48px;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: calc(var(--nav-h) + 16px)
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto
+      }
+
+      * {
+        animation: none !important;
+        transition: none !important
+      }
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--foreground);
+      font-family: var(--font-secondary);
+      font-size: 17px;
+      line-height: 1.62;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection {
+      background: var(--primary);
+      color: var(--primary-foreground)
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(140, 198, 65, .35)
+    }
+
+    a:hover {
+      opacity: .85
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px
+    }
+
+    /* ============================================================== navbar === */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      height: var(--nav-h);
+      background: var(--background);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topbar-inner {
+      height: 100%;
+      max-width: var(--measure);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: var(--s-l);
+      padding: 0 var(--s-xl);
+    }
+
+    .wordmark {
+      font-family: var(--font-primary);
+      font-size: 20px;
+      letter-spacing: 1px;
+      color: var(--primary);
+      text-transform: uppercase;
+      border: 0;
+      white-space: nowrap;
+    }
+
+    .wordmark span {
+      color: var(--foreground)
+    }
+
+    .topbar-links {
+      display: flex;
+      gap: var(--s-xl);
+      margin-left: auto
+    }
+
+    .topbar-links a {
+      font-family: var(--font-primary);
+      font-size: 12px;
+      letter-spacing: var(--tracking-label);
+      text-transform: uppercase;
+      color: var(--foreground);
+      border: 0;
+    }
+
+    .topbar-links a.on {
+      color: var(--primary)
+    }
+
+    .topbar-cta {
+      font-family: var(--font-primary);
+      font-size: 12px;
+      letter-spacing: var(--tracking-label);
+      text-transform: uppercase;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary);
+      border-radius: var(--radius-none);
+      padding: 10px 20px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity .15s ease;
+    }
+
+    .topbar-cta:hover {
+      opacity: .85
+    }
+
+    /* ============================================================== layout === */
+    .page {
+      max-width: var(--measure);
+      margin: 0 auto;
+      padding: 0 clamp(16px, 4vw, var(--main-pad));
+    }
+
+    /* ================================================================ hero === */
+    .hero {
+      position: relative;
+      padding: var(--s-xl) 0 var(--s-xl);
+      overflow: hidden
+    }
+
+    /* Copy on the left, the tip panel on the right — introduced beside the
+       "who is building this" section rather than the hero. */
+    .split {
+      display: grid;
+      grid-template-columns: 1fr minmax(300px, 380px);
+      gap: var(--s-xxl);
+      align-items: start;
+    }
+
+    .split-panel {
+      position: sticky;
+      top: calc(var(--nav-h) + var(--s-l));
+    }
+
+    .split-panel .kofi-embed {
+      max-width: none;
+      margin: 0;
+    }
+
+    @media (max-width:900px) {
+      .split {
+        grid-template-columns: 1fr;
+        gap: var(--s-l)
+      }
+
+      .split-panel {
+        position: static
+      }
+
+      .split-panel .kofi-embed {
+        max-width: 480px
+      }
+    }
+
+    .glitch {
+      position: absolute;
+      top: 24px;
+      right: 0;
+      width: 280px;
+      height: 88px;
+      pointer-events: none
+    }
+
+    .glitch i {
+      position: absolute;
+      display: block
+    }
+
+    .glitch i:nth-child(1) {
+      top: 10px;
+      left: 0;
+      width: 180px;
+      height: 6px;
+      background: var(--accent);
+      opacity: .7
+    }
+
+    .glitch i:nth-child(2) {
+      top: 30px;
+      left: 40px;
+      width: 220px;
+      height: 4px;
+      background: var(--primary);
+      opacity: .6
+    }
+
+    .glitch i:nth-child(3) {
+      top: 50px;
+      left: 10px;
+      width: 140px;
+      height: 6px;
+      background: var(--accent);
+      opacity: .9
+    }
+
+    .glitch i:nth-child(4) {
+      top: 68px;
+      left: 60px;
+      width: 200px;
+      height: 3px;
+      background: var(--primary);
+      opacity: .5
+    }
+
+    @media (max-width:900px) {
+      .glitch {
+        display: none
+      }
+    }
+
+    .eyebrow {
+      font-family: var(--font-primary);
+      font-size: 11px;
+      letter-spacing: var(--tracking-section);
+      text-transform: uppercase;
+      color: var(--primary);
+      margin: 0 0 var(--s-m);
+    }
+
+    .hero h1 {
+      font-family: var(--font-primary);
+      font-weight: 400;
+      font-size: clamp(36px, 5.2vw, 60px);
+      line-height: 1.02;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+      color: var(--foreground);
+      margin: 0 0 var(--s-l);
+      max-width: 20ch;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--primary)
+    }
+
+    .lede {
+      font-size: 19px;
+      color: var(--foreground);
+      max-width: 56ch;
+      margin: 0 0 var(--s-l)
+    }
+
+    .lede b {
+      color: var(--primary);
+      font-weight: 700
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s-m);
+      margin: var(--s-l) 0 var(--s-xl)
+    }
+
+    .btn {
+      display: inline-block;
+      font-family: var(--font-primary);
+      font-size: 13px;
+      letter-spacing: var(--tracking-label);
+      text-transform: uppercase;
+      padding: 14px 28px;
+      border-radius: var(--radius-none);
+      cursor: pointer;
+      border: 1px solid;
+      transition: opacity .15s ease;
+    }
+
+    .btn:hover {
+      opacity: .85
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border-color: var(--primary)
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border-color: var(--primary)
+    }
+
+    /* ============================================================= sections == */
+    section {
+      padding: var(--s-xxl) 0;
+      border-top: 1px solid var(--border)
+    }
+
+    .sec-kicker {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-primary);
+      font-size: 10px;
+      letter-spacing: var(--tracking-section);
+      text-transform: uppercase;
+      color: var(--muted-foreground);
+      margin: 0 0 var(--s-m);
+    }
+
+    .sec-kicker::before {
+      content: "";
+      width: 6px;
+      height: 24px;
+      background: var(--primary);
+      flex: 0 0 auto
+    }
+
+    section h2 {
+      font-family: var(--font-primary);
+      font-weight: 400;
+      font-size: clamp(28px, 3.6vw, 40px);
+      line-height: 1.08;
+      text-transform: uppercase;
+      color: var(--foreground);
+      margin: 0 0 var(--s-m);
+      letter-spacing: -0.3px;
+    }
+
+    section h3 {
+      font-family: var(--font-primary);
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 1.25;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--foreground);
+      margin: var(--s-xl) 0 var(--s-m);
+    }
+
+    section p {
+      max-width: 64ch
+    }
+
+    /* label / description pairs — the brand's callout grid */
+    .callout {
+      display: grid;
+      grid-template-columns: minmax(150px, auto) 1fr;
+      gap: var(--s-m) var(--s-l);
+      margin: var(--s-l) 0;
+      font-size: 15px
+    }
+
+    .callout b {
+      font-family: var(--font-primary);
+      font-size: 10px;
+      letter-spacing: var(--tracking-label);
+      text-transform: uppercase;
+      color: var(--primary);
+      padding-top: 3px;
+    }
+
+    .callout span {
+      color: var(--muted-foreground)
+    }
+
+    @media (max-width:640px) {
+      .callout {
+        grid-template-columns: 1fr;
+        gap: 2px var(--s-s)
+      }
+
+      .callout span {
+        margin-bottom: var(--s-s)
+      }
+    }
+
+    .note {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-top: 4px solid var(--primary);
+      padding: var(--s-m) var(--s-l);
+      margin: var(--s-l) 0;
+    }
+
+    .note.warn {
+      border-top-color: var(--accent)
+    }
+
+    .note> :last-child {
+      margin-bottom: 0
+    }
+
+    .note p {
+      font-size: 15px;
+      color: var(--muted-foreground);
+      margin: 0 0 var(--s-s)
+    }
+
+    /* ============================================================ ko-fi ===== */
+    /* The Ko-fi panel is served light; frame it so the bright rectangle reads
+       as an intentional inset rather than a broken element. */
+    .kofi-embed {
+      max-width: 480px;
+      margin: var(--s-l) 0 0;
+      border: 1px solid var(--border);
+      border-top: 4px solid var(--primary);
+      background: var(--bg-surface);
+      padding: var(--s-s);
+    }
+
+    .kofi-embed iframe {
+      display: block
+    }
+
+    .kofi-note {
+      font-size: 13px;
+      color: var(--muted-foreground);
+      margin: var(--s-s) 0 0
+    }
+
+    /* ============================================================== goal ===== */
+    /* Static progress bar. The only things to change are data-raised and
+       data-target on <section id="goal">; the percentage and fill are derived. */
+    #goal {
+      padding: var(--s-l) 0;
+    }
+
+    #goal .sec-kicker {
+      margin-bottom: var(--s-s);
+    }
+
+    /* this section's accent is the warned orange, so its marker matches the bar */
+    #goal .sec-kicker::before {
+      background: var(--accent);
+    }
+
+    .goal-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--s-m);
+      margin-bottom: var(--s-s);
+    }
+
+    #goal h2 {
+      margin: 0;
+      font-size: clamp(20px, 2.4vw, 28px);
+    }
+
+    .goal-pct {
+      font-family: var(--font-primary);
+      font-size: clamp(20px, 2.4vw, 28px);
+      line-height: 1;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .goal-track {
+      height: 14px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .goal-fill {
+      height: 100%;
+      width: 0;
+      background: var(--accent);
+      transition: width .6s ease;
+    }
+
+    .goal-cap {
+      font-size: 13px;
+      color: var(--muted-foreground);
+      margin: 6px 0 0;
+    }
+
+    /* ============================================================= footer ==== */
+    .foot {
+      border-top: 1px solid var(--border);
+      padding: var(--s-xxl) 0;
+      color: var(--muted-foreground);
+      font-size: 14px
+    }
+
+    .foot .wordmark {
+      display: inline-block;
+      margin-bottom: var(--s-m);
+      font-size: 18px
+    }
+
+    .foot p {
+      max-width: 64ch
+    }
+
+    /* ============================================================== motion === */
+    .rise {
+      opacity: 0;
+      transform: translateY(12px);
+      animation: rise .5s ease forwards
+    }
+
+    .rise.d1 {
+      animation-delay: .06s
+    }
+
+    .rise.d2 {
+      animation-delay: .12s
+    }
+
+    .rise.d3 {
+      animation-delay: .18s
+    }
+
+    @keyframes rise {
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .rise {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    /* ============================================================ responsive = */
+    @media (max-width:1000px) {
+      .topbar-links {
+        display: none
+      }
+
+      .topbar-cta {
+        margin-left: auto
+      }
+
+      .topbar-inner {
+        gap: var(--s-s);
+        padding: 0 var(--s-m)
+      }
+    }
+
+    @media (max-width:520px) {
+      body {
+        font-size: 16px
+      }
+    }
+  </style>
+</head>
+
+<body id="top">
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="wordmark" href="index.html">SLIP<span>FIT</span></a>
+      <nav class="topbar-links">
+        <a href="index.html#install">Install</a>
+        <a href="index.html#first">First part</a>
+        <a href="index.html#calibrate">Calibrate</a>
+        <a href="index.html#examples">Examples</a>
+        <a class="on" href="support.html">Support</a>
+      </nav>
+      <a class="topbar-cta" href="index.html#install">Get Slipfit</a>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <section class="hero" style="border-top:0">
+      <p class="eyebrow rise">Support the project</p>
+      <h1 class="rise d1">Slipfit is a <em>one-person</em> project</h1>
+      <p class="lede rise d2">
+        I build Slipfit for the 3D-printing community — on my own, around a day job. The app is
+        free and stays free. If it has saved you a reprint, a tip keeps the printers running and
+        the installers signed.
+      </p>
+      <div class="hero-cta rise d3">
+        <a class="btn btn-primary" href="https://ko-fi.com/codechomper" target="_blank" rel="noopener">Tip on Ko-fi</a>
+        <a class="btn btn-outline" href="https://ko-fi.com/codechomper/tiers" target="_blank" rel="noopener">Monthly support</a>
+      </div>
+    </section>
+
+    <section id="goal" data-raised="10" data-target="2500">
+      <p class="sec-kicker">The goal</p>
+      <div class="goal-row">
+        <h2>A new 3D printer</h2>
+        <span class="goal-pct" data-goal-pct>0%</span>
+      </div>
+      <div class="goal-track" role="progressbar" aria-label="Progress toward a new 3D printer"
+        aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="goal-fill" data-goal-fill></div>
+      </div>
+      <p class="goal-cap">A dedicated machine for calibration and regression prints, so fixes get
+        tested on more than my daily driver.</p>
+    </section>
+
+    <section id="about">
+      <div class="split">
+        <div class="split-copy">
+          <p class="sec-kicker">Who is building this</p>
+          <h2>One developer, one bench</h2>
+          <p>
+            I'm the sole developer. Slipfit started because I was tired of dialing in the same hole
+            clearance on every model, then watching that number go stale the next time I changed
+            filament or nozzle. It is the tool I wanted on my own bench, and I have been building it
+            in the open for anyone who prints parts that have to fit.
+          </p>
+          <p>
+            There is no company behind this and no investors to answer to. Development happens in
+            evenings and weekends, and every release is tested against real prints before it ships.
+            The <a href="index.html">documentation site</a> and the
+            <a href="https://github.com/CodeChomper/slipfit-releases" target="_blank" rel="noopener">release page</a>
+            are the whole operation.
+          </p>
+        </div>
+        <div class="split-panel">
+          <div class="kofi-embed">
+            <iframe id='kofiframe'
+              src='https://ko-fi.com/codechomper/?hidefeed=true&widget=true&embed=true&preview=true'
+              style='border:none;width:100%;padding:4px;background:#f9f9f9;' height='640'
+              title='codechomper'></iframe>
+          </div>
+          <p class="kofi-note">The panel is served by Ko-fi. If it does not load, use
+            <a href="https://ko-fi.com/codechomper" target="_blank" rel="noopener">ko-fi.com/codechomper</a> directly.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="funds">
+      <p class="sec-kicker">Where the money goes</p>
+      <h2>Straight into the project</h2>
+      <p>
+        Support goes to the running costs of building and shipping a desktop app that has to be
+        trusted on someone else's machine. In rough order of what it covers:
+      </p>
+      <div class="callout">
+        <b>Test hardware</b>
+        <span>Printers, hotends, and probes to calibrate against. Slipfit's premise is that
+          <em>your</em> machine's measurements decide the millimeters, so it has to be proven on
+          more than one machine.</span>
+
+        <b>Filament</b>
+        <span>Calibration prints, tolerance ladders, and the failed parts that find the bugs.</span>
+
+        <b>Signing &amp; notarization</b>
+        <span>Apple Developer membership and Windows code-signing, so the installers open without a
+          scary warning.</span>
+
+        <b>Hosting &amp; publishing</b>
+        <span>The release page, the documentation site, and the platform fees that come with putting
+          software in front of people.</span>
+
+        <b>Time</b>
+        <span>Every hour that is funded is an hour spent on features and fixes instead of
+          something else.</span>
+      </div>
+    </section>
+
+    <section id="donate">
+      <p class="sec-kicker">Chip in</p>
+      <h2>Tip once, or monthly</h2>
+      <p>
+        Everything runs through Ko-fi. One-time tips arrive in full — Ko-fi takes no cut of those.
+        Give whatever a saved reprint is worth to you.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="https://ko-fi.com/codechomper" target="_blank" rel="noopener">Open Ko-fi</a>
+        <a class="btn btn-outline" href="https://ko-fi.com/codechomper/tiers" target="_blank" rel="noopener">Monthly membership</a>
+      </div>
+
+      <div class="note warn">
+        <p>A tip does not buy priority support or a say in the roadmap — it just keeps the lights
+          on. Bug reports and feature requests are welcome from everyone, funded or not, on the
+          <a href="https://github.com/CodeChomper/slipfit-releases" target="_blank" rel="noopener">release page</a>.</p>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <a class="wordmark" href="index.html">SLIP<span>FIT</span></a>
+      <p>
+        A code-centric parametric modeler for functional printed parts. The code holds intent, your
+        profile holds your workshop, and the millimeters are resolved at export.
+      </p>
+      <p>
+        <a href="index.html">Documentation</a> ·
+        <a href="https://github.com/CodeChomper/slipfit-releases" target="_blank" rel="noopener">Release page on GitHub</a> ·
+        <a href="#top">Back to the top</a>
+      </p>
+    </footer>
+
+  </main>
+
+  <script>
+    // Derive the goal bar from data-raised / data-target on #goal.
+    (function () {
+      var g = document.getElementById('goal');
+      if (!g) return;
+      var raised = parseFloat(g.dataset.raised) || 0;
+      var target = parseFloat(g.dataset.target) || 1;
+      var ratio = Math.max(0, Math.min(1, raised / target));
+      var pct = ratio * 100;
+      var text = pct === 0 ? '0%'
+        : pct < 10 ? (Math.round(pct * 10) / 10) + '%'
+          : Math.round(pct) + '%';
+      g.querySelector('[data-goal-pct]').textContent = text;
+      // keep a visible sliver once anything has come in
+      g.querySelector('[data-goal-fill]').style.width = Math.max(pct, raised > 0 ? 0.8 : 0) + '%';
+      g.querySelector('.goal-track').setAttribute('aria-valuenow', Math.round(pct));
+    })();
+  </script>
+
+</body>
+
+</html>

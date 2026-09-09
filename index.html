@@ -6,12 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Slipfit — parts that fit, first time</title>
   <meta name="description"
-    content="Slipfit is CAD for people who print functional parts. You write what a hole is for; your printer's measurements decide the millimetres. Install, calibrate, and print a part that fits." />
+    content="Slipfit is CAD for people who print functional parts. You write what a hole is for; your printer's measurements decide the millimeters. Install, calibrate, and print a part that fits." />
   <meta name="theme-color" content="#080808" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Slipfit — parts that fit, first time" />
   <meta property="og:description"
-    content="CAD for people who print functional parts. Write what a hole is for; your printer's measurements decide the millimetres." />
+    content="CAD for people who print functional parts. Write what a hole is for; your printer's measurements decide the millimeters." />
   <meta property="og:image" content="images/AppDemo.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,12 +21,44 @@
     rel="stylesheet">
   <style>
     /* ==========================================================================
+    KO-fi widget alignment — hug the right edge of the centered content
+    column (--shell), not the window edge; fall back to a 16px gutter
+    once the viewport is narrower than the column.
+    ===========================================================================*/
+    .floatingchat-container-wrap {
+      left: unset !important;
+      right: max(16px, calc((100vw - var(--shell)) / 2)) !important;
+      width: min(50%, 240px) !important;
+    }
+
+    .floatingchat-container-wrap-mobi {
+      left: unset !important;
+      right: max(16px, calc((100vw - var(--shell)) / 2)) !important;
+      width: min(50%, 240px) !important;
+    }
+
+    .floating-chat-kofi-popup-iframe {
+      left: unset !important;
+      right: max(16px, calc((100vw - var(--shell)) / 2)) !important;
+    }
+
+    .floating-chat-kofi-popup-iframe-mobi {
+      left: unset !important;
+      right: max(16px, calc((100vw - var(--shell)) / 2)) !important;
+    }
+
+    .floating-chat-kofi-popup-iframe-closer-mobi {
+      left: unset !important;
+      right: max(16px, calc((100vw - var(--shell)) / 2)) !important;
+    }
+
+    /* ==========================================================================
    CodeChomper design system — tokens
    Dark by design. The brand is near-black with one working accent; there is
    no light variant, and inventing one here would be a different brand.
    ========================================================================== */
     :root {
-      /* colour */
+      /* color */
       --background: #080808;
       --bg-surface: #111111;
       --bg-elevated: #1a1a1a;
@@ -72,8 +104,8 @@
       --side: 272px;
       --measure: 62rem;
       --main-pad: 48px;
-      /* Sidebar + measure + the main column's gutters, travelling as one block so a
-     wide monitor centres the pair rather than stranding the nav at the far left. */
+      /* Sidebar + measure + the main column's gutters, traveling as one block so a
+     wide monitor centers the pair rather than stranding the nav at the far left. */
       --shell: calc(var(--side) + var(--measure) + var(--main-pad) * 2);
     }
 
@@ -129,7 +161,7 @@
 
     /* ============================================================== navbar === */
     /* The bar itself spans the window so its rule reaches both edges; its contents
-   ride the same centred block as the shell below. */
+   ride the same centered block as the shell below. */
     .topbar {
       position: sticky;
       top: 0;
@@ -220,7 +252,7 @@
       border-right: 1px solid var(--border);
       background: var(--bg-surface);
       padding: var(--s-l) 0 var(--s-xxl);
-      /* the panel is a visible column now that the shell is centred, so its own
+      /* the panel is a visible column now that the shell is centered, so its own
      scrollbar has to belong to it rather than to the browser */
       scrollbar-width: thin;
       scrollbar-color: var(--border) transparent;
@@ -774,7 +806,7 @@
       border-radius: 0;
     }
 
-    /* a .slip block is a file — labelled like one */
+    /* a .slip block is a file — labeled like one */
     pre.file::before {
       content: attr(data-name);
       display: block;
@@ -801,7 +833,7 @@
       letter-spacing: 1px;
       color: var(--muted-foreground);
       /* the brand's traffic-light dots, painted rather than typed so each keeps its
-     own colour */
+     own color */
       background:
         radial-gradient(circle 5px at 24px 50%, var(--accent) 98%, transparent 100%),
         radial-gradient(circle 5px at 40px 50%, var(--primary) 98%, transparent 100%),
@@ -834,7 +866,7 @@
       border-top-color: var(--primary)
     }
 
-    /* syntax colours. Three colours only, and each means something:
+    /* syntax colors. Three colors only, and each means something:
    green = a unit literal (the one thing Slipfit adds to Python),
    orange = a Python keyword, white = a name Slipfit gave you. */
     .t-unit {
@@ -1775,6 +1807,7 @@
         <a href="#first">First part</a>
         <a href="#calibrate">Calibrate</a>
         <a href="#examples">Examples</a>
+        <a href="support.html">Support</a>
       </nav>
       <a class="topbar-cta" href="#install">Get Slipfit</a>
       <button class="navbtn" id="navbtn" aria-expanded="false" aria-controls="side">Contents</button>
@@ -1782,6 +1815,7 @@
   </header>
 
   <div class="shell">
+
     <nav class="side" id="side">
       <div class="nav">
         <h4>Start here</h4>
@@ -1838,7 +1872,7 @@
             Every printer shrinks a hole by a different amount. So you type <b>3.2</b>, print it, find it
             tight, try <b>3.3</b>, and now that number is wrong for everyone else and wrong for you the day
             you swap filament. Slipfit lets you write what the hole is <em>for</em> — an M3 bolt, passing
-            through — and works out the millimetres from gauges you printed on your own machine.
+            through — and works out the millimeters from gauges you printed on your own machine.
           </p>
 
           <div class="hero-cta rise d3">
@@ -1892,15 +1926,15 @@
         <!-- ==================================================== WHAT ========== -->
         <section id="what">
           <p class="sec-kicker">Start here</p>
-          <h2>What this is, and who it is for</h2>
+          <h2>What Slipfit is, and who it is for</h2>
           <p class="sub">You own a printer and a drawer of hardware. You have never written a line of code. This page
-            takes you from there to a part that fits first time.</p>
+            takes you from <strong>ZERO</strong> to a part that <strong>FITS</strong> first time.</p>
 
           <figure class="shot">
             <img src="images/AppDemo.jpg" width="1704" height="948"
               alt="The Slipfit window: a .slip file in the editor on the left, the built part — a vented plate with four standoffs — in the 3D view on the right, and the showing control set to nominal in the title bar." />
             <figcaption>One file, one part. That is the whole tool: what you typed, what it built, and which printer the
-              millimetres came from. Click any picture on this page to see it full size.</figcaption>
+              millimeters came from. Click any picture on this page to see it full size.</figcaption>
           </figure>
 
           <p>
@@ -1916,7 +1950,7 @@
             machine, your nozzle and your filament. Slipfit splits that problem in two. Your file records
             <strong>intent</strong> — this is an M3 bolt and it has to pass through. Your <strong>profile</strong>
             records what your printer actually does to a hole, measured once by printing a gauge and pushing
-            real hardware into it. The millimetres get worked out when you export.
+            real hardware into it. The millimeters get worked out when you export.
           </p>
 
           <div class="grid2">
@@ -1944,36 +1978,35 @@
             <div class="card">
               <div class="card-inner">
                 <h4>Calibrate once</h4>
-                <p>Three gauges, about 40 minutes of printing. Every part you make afterwards uses those numbers.</p>
+                <p>A few gauges, about 40 minutes of printing. Every part you make afterwards uses those numbers.</p>
               </div>
             </div>
           </div>
 
-          <h3>Do I need to know Python?</h3>
+          <h3>Do I need to know how to program?</h3>
           <p>
             No — not to start, and possibly not ever. Slipfit files are written in Python, but the first
             half of this page uses nothing except names Slipfit hands you, and every example is short enough
-            to read out loud. A five-line file is a real Slipfit file.
+            to read out loud. A five-line file is a real Slipfit file and a real part you can print.
           </p>
           <p>
-            Python turns up later, when you want forty vents instead of one, or a bolt pattern that
-            re-centres itself. At that point the whole language is sitting there — loops, functions,
+            You can use Python later, when you want forty vents instead of one, or a bolt pattern that
+            re-centers itself. At that point the whole language is sitting there — loops, functions,
             arithmetic — rather than a cut-down scripting dialect that runs out just as you get somewhere.
             Where this page uses one of those, it explains it.
           </p>
 
           <h3>What it does not do</h3>
           <p>
-            Worth knowing up front so you do not go hunting. In this version 0.5.0 there are no assemblies and no
-            interference checking. No sweeps, lofts, splines, draft angles or offsets. No constraint solver — a
-            <a href="#profiles">profile's</a> dimensions are the code, not a drag. Version 1.0 is in the works to
-            address some of these. Most of a part is solid blocks added together and cut away — the way you would
+            Worth knowing up front so you do not go hunting. In this version there are no lofts, splines,
+            draft angles or offsets. No constraint solver — a <a href="#profiles">profile's</a> dimensions are
+            the code, not a drag. Most of a part is solid blocks added together and cut away — the way you would
             describe it to somebody over the phone — plus a 2D outline drawn once and swept, mirrored or patterned
             into the rounded, repeated and revolved shapes a block alone cannot make. One file produces one part,
             though it <a href="#compose">can be built out of several files</a>.
           </p>
           <p>
-            If you want to model an organic shape, use something else. If you want a bracket, a mount, an
+            If you want to model an organic shape, there are better tools for that. If you want a bracket, a mount, an
             enclosure lid or a jig, this is aimed squarely at you.
           </p>
         </section>
@@ -2023,12 +2056,17 @@
             folder and never asks for administrator rights.
           </p>
           <div class="note warn">
-            <span class="tag">Windows will warn you, and it is right to</span>
+            <span class="tag">Windows will warn you</span>
             <p>The installer is <strong>not code-signed</strong> — a certificate costs real money and this
               is a one-person project — so Windows shows <em>“Windows protected your PC”</em>. To continue,
               click <strong>More info</strong>, then <strong>Run anyway</strong>.</p>
             <p>That warning is exactly the warning you should heed on a file from a stranger. Only click
               through it for software you actually meant to install, from a place you actually trust.</p>
+            <span class="tag">Antivirus (norton)</span>
+            <p>I have tested the installation on a PC with Norton antivirus and a popup appeared saying they
+              were checking my app and sending it to their threat team. It sounded scary but it passed their
+              analysis and runs fine on that computer afterwards.
+            </p>
           </div>
 
           <h3>Linux</h3>
@@ -2072,8 +2110,7 @@
           <p>
             They are separate on purpose. A calibration describes <em>your printer</em>, not one project, so
             it has to follow you into every folder you model in. Keeping it with the models would mean a
-            part opened from your Downloads folder quietly exported uncompensated — the right shape, the
-            wrong size, and nothing on screen to say so.
+            part opened from your Downloads folder quietly exported uncompensated.
           </p>
         </section>
 
@@ -2081,8 +2118,8 @@
         <section id="window">
           <p class="sec-kicker">Start here</p>
           <h2>The window</h2>
-          <p class="sub">Your file on the left, your part on the right, and one control at the top that decides which
-            printer you are looking at.</p>
+          <p class="sub">Your file on the left, your part on the right, and a dropdown at the top that decides which
+            printer you are using.</p>
 
           <div class="app" aria-hidden="true">
             <div class="app-bar">
@@ -2094,7 +2131,7 @@
               </span>
               <span class="sp"></span>
               <span class="f">showing</span><span class="chip b">kobra-s1-0.4 · PLA ▾</span>
-              <span class="f">built · 1.2s</span>
+              <span class="f">built · 0.2s</span>
               <span class="chip">Calibration</span>
             </div>
             <div class="app-split">
@@ -2148,7 +2185,7 @@
           </div>
 
           <div class="callout">
-            <b>showing</b><span>nominal, or as a chosen printer will actually print it. Switching rebuilds the
+            <b>showing</b><span>nominal, or how a chosen printer will actually print it. Switching rebuilds the
               model.</span>
             <b>tabs</b><span>several files open at once. The active tab is the one the 3D view is showing.</span>
             <b>editor</b><span>your <code>.slip</code>. It rebuilds about a third of a second after you stop typing, and
@@ -2228,24 +2265,24 @@
 
           <h3 id="gizmo">The gizmo in the corner, for looking straight at something</h3>
           <p>
-            Bottom-left of the viewport sits a little cluster of six coloured balls on three spokes, with a
+            Bottom-left of the viewport sits a little cluster of six colored balls on three spokes, with a
             hub in the middle. <strong>Click a ball and the camera goes to that axis and looks straight down
-              it</strong> — down z for a plan view of the bed, along x or y for a side. The balls are lettered
+              it</strong> — down z for a top view of the bed, along x or y for a side. The balls are lettered
             and filled on the positive side of each axis and hollow on the negative, so you can tell
-            <code>+x</code> from <code>−x</code> without having to know which colour is which.
+            <code>+x</code> from <code>−x</code> without having to know which color is which.
           </p>
           <p>
-            That view is drawn <strong>flat</strong> — no perspective — and the reason is worth a sentence,
-            because it is the only place in Slipfit where how you look changes what you can tell. Under
+            An axis view is drawn <strong>flat</strong> - no perspective - and the reason is worth explaining,
+            in a flat view you can see exactly how things line up (or don't). Under
             normal perspective, parallel edges converge as they go away from you, so a hole that is square
             to an edge and a hole that is 2° off look the same. Flat, they do not: parallel stays parallel,
             and <em>lined up</em> becomes something you can see rather than something you hope. That is what
             makes “are these two faces in the same plane” answerable by eye. <strong>Click the hub</strong>
-            to go back to the ordinary view.
+            to go back to the perspective view.
           </p>
 
           <figure class="shot">
-            <img src="images/nav-gizmo.png" alt="A close crop of the viewport's bottom-left corner showing the gizmo — the three coloured spokes, six
+            <img src="images/nav-gizmo.png" alt="A close crop of the viewport's bottom-left corner showing the gizmo — the three colored spokes, six
                 balls and the hub — with the part behind it, plus the same part after clicking the +z ball:
                 straight down, flat, and every hole a true circle." width="1200" height="800" />
             <figcaption>Six balls and a hub. The flat view is the one in which “is that square to it” has an answer.
@@ -2253,14 +2290,14 @@
           </figure>
 
           <div class="note">
-            <span class="tag">If the orbit runs the wrong way, change it</span>
-            <p>Half of all CAD moves the camera with your mouse and half moves the model, so one of them
+            <span class="tag">If the orbiting the view feels wrong, change it</span>
+            <p>Half of all CAD programs move the camera with your mouse and half move the model, so one of them
               feels backwards to everybody. <strong>File ▸ Settings…</strong> (<span class="kbd">Ctrl/Cmd + ,</span>)
               reverses orbit horizontally, orbit vertically, pan horizontally, pan vertically and the zoom
               wheel — five separate switches, because the usual complaint is about one axis and flipping all
               of them fixes the wrong thing.</p>
-            <p>That setting is about <em>looking</em>. It never enters your <code>.slip</code>, so it cannot
-              change what you built.</p>
+            <p>The settings are stored in the <em>application</em> and don't move with your <code>.slip</code> files.
+            </p>
           </div>
 
           <h3>Three things the viewport shows that are not your part</h3>
@@ -2295,18 +2332,19 @@
           <p>
             <span class="kbd">A</span> cycles the anchors between <strong>named</strong> (the ones somebody
             declared, the default), <strong>all</strong> (including the six every box has) and
-            <strong>none</strong>. Clicking a face always shows that body's anchors regardless — that is a
-            reply to something you just did, not standing furniture.
+            <strong>none</strong>. Clicking a face always shows that body's anchors regardless - this is helpful
+            when debugging a shape that landed somewhere unexpected.
           </p>
 
           <h3>The editor helps as you type</h3>
           <p>
-            Start typing a name and a list appears with what fits: Slipfit's own vocabulary, Python's
+            Start typing and a list appears with what fits: Slipfit's own vocabulary, Python's
             keywords, and the unit suffixes. The suffix list only opens where a suffix can actually go —
             directly after a number, with nothing in between — so <code>range(10</code> does not sprout a
             popup, and after <code>1/4</code> you are offered <code>in</code> as <em>inches</em> rather than
             as the Python keyword. It is entirely local: nothing is fetched, nothing is indexed, nothing
-            leaves your machine.
+            leaves your machine. Once a list of options appear you can use up or down arrows to select one
+            and enter to accept you selection.
           </p>
 
           <h3>Menu commands worth knowing</h3>
@@ -2374,11 +2412,12 @@
 
           <h3>Working on several files at once</h3>
           <p>
-            Files open in tabs above the split, and the active tab is the one the 3D view is showing. Each
-            tab keeps its own text, its own undo history and its own last successful build, so switching
-            back to something you were looking at five minutes ago is instant rather than a rebuild. This
-            is what makes <a href="#compose">a part built from several files</a> workable: click into the
-            library, fix the standoff, click back, and the model that uses it has already rebuilt.
+            Files open in tabs above the editor, and the active tab is the one the one with the underline and
+            the one the 3D view is showing. Each tab keeps its own text, its own undo history and its own
+            last successful build, so switching back to something you were looking at five minutes ago is
+            instant rather than a rebuild. This is what makes <a href="#compose">a part built from several
+              files</a> workable: click into the library, fix the standoff, click back, and the model that
+            uses it has already rebuilt.
           </p>
 
           <h3>Four states, and how to tell them apart</h3>
@@ -2393,7 +2432,7 @@
               <tbody>
                 <tr>
                   <td><strong>Built</strong></td>
-                  <td>The part, in solid surface colour.</td>
+                  <td>The part, in solid surface color.</td>
                 </tr>
                 <tr>
                   <td><strong>Failed, nothing built</strong></td>
@@ -2423,7 +2462,7 @@
           <div class="note warn">
             <span class="tag">Never export an amber part</span>
             <p>Amber and hatched means the build stopped partway and you are looking at an intermediate
-              stage, not your model. It gets three separate signals — the colour, a wireframe shell over it
+              stage, not your model. It gets three separate signals — the color, a wireframe shell over it
               and a text badge — precisely so it cannot be mistaken for a finished part.</p>
           </div>
         </section>
@@ -2432,7 +2471,8 @@
         <section id="trust">
           <p class="sec-kicker">Start here</p>
           <h2>Opening a file is not running it</h2>
-          <p class="sub">Read this bit even if you skip the rest. A <code>.slip</code> is a program, and running one you
+          <p class="sub">Read this bit even if you skip the rest. A <code>.slip</code> file is a program, and running
+            one you
             did not write carries the same risk as running any other program from a stranger.</p>
 
           <div class="app" aria-hidden="true">
@@ -2452,11 +2492,11 @@
 
           <figure class="shot">
             <img src="images/trust-banner.png" alt="…" width="1600" />
-            <figcaption>Shown, coloured, and not executed. The button is the only way past this.</figcaption>
+            <figcaption>Shown, colored, and not executed. The button is the only way past this.</figcaption>
           </figure>
 
           <p>
-            Open a file Slipfit has not seen before and it is read, shown and colour-coded — and
+            Open a file Slipfit has not seen before and it is read, shown and color-coded — and
             <strong>not built</strong>. The banner across the top is the only route from “I can read this”
             to “this may run”. Nothing has executed while you sit there looking at it.
           </p>
@@ -2494,20 +2534,18 @@
             <span class="tag">The .slip extension protects nothing</span>
             <p>A <code>.slip</code> downloaded from a maker forum can read your files and send them
               somewhere, and nothing about the resulting geometry would look wrong. There is no sandbox
-              around a model, and a custom file extension must not be allowed to imply one. Read a shared
-              file before you trust it — it is plain text, and that is half the point of plain text.</p>
+              around a model, and a custom file extension does not imply one. Read a shared
+              file before you trust it. It is plain text, and that is half the point of plain text.</p>
             <p>Including one file from another <em>runs</em> it too, so the prompt lists every file that
               will execute, not just the one you clicked.</p>
           </div>
 
           <div class="note">
             <span class="tag">Data is listed apart from code, and not warned about</span>
-            <p>A <code>.slip</code> runs; a <a href="#step">bought-part STEP file</a> or a font is
+            <p>A <code>.slip</code> runs; a <a href="#step">STEP file</a> used or a font is
               <em>parsed</em>. The banner lists both, under headings that say which is which, but only the
-              code gets the warning — borrowing it for a file that is merely read would be crying wolf. A
-              STEP that changes afterwards does not re-prompt either, because nothing was ever agreed to
-              about <em>running</em> it. It still shows up in the export report, because "what does this
-              model depend on" is worth answering either way.</p>
+              code gets the warning. Step files and fonts do not run code.
+            </p>
           </div>
         </section>
 
@@ -2546,8 +2584,8 @@
 
           <h3>Reading that out loud</h3>
           <p>
-            Read it as one sentence: <em>“take a block 40 by 20 by 3, cut a 5mm hole 3 deep into it at
-              (20, 10, 3), and call the result <code>part</code>.”</em> Every piece of it:
+            Read it as one sentence: <em>“take a block 40mm by 20mm by 3mm, cut a 5mm hole 3mm deep into it at
+              (20mm, 10mm, 3mm), and call the result <code>part</code>.”</em> Every piece of it:
           </p>
 
           <div class="gloss">
@@ -2562,7 +2600,8 @@
                   Z</strong></dd>
 
               <dt>.cut(…)</dt>
-              <dd>The full stop means <em>“and then do this to it”</em>. <code>.cut</code> takes a second shape away
+              <dd>The full stop (period) means <em>“and then do this to it”</em>. <code>.cut</code> takes a second shape
+                away
                 from the first, the way a drill takes material out of a plate.</dd>
 
               <dt>hole(5mm, 3mm, …)</dt>
@@ -2570,7 +2609,7 @@
 
               <dt>at=(20mm, 10mm, 3mm)</dt>
               <dd>Where to put it. <code>at</code> is the name of the setting and everything after the <code>=</code> is
-                its value — 20 along, 10 across, at the top surface. That is halfway in both directions on a 40 × 20
+                its value — 20 along, 10 across, at the top surface. That is halfway in both directions on a 40mm x 20mm
                 plate.</dd>
             </dl>
           </div>
@@ -2585,8 +2624,7 @@
           <div class="note">
             <span class="tag">Sizes are diameters, never radii</span>
             <p>Hardware is sold by diameter, holes are drilled by diameter, and calipers read diameter — so
-              Slipfit never asks you for a radius. <code>hole(5mm, …)</code> is five millimetres across. The
-              one conversion people get wrong is the one you are never asked to do.</p>
+              Slipfit never asks you for a radius. <code>hole(5mm, …)</code> is five millimeters across.</p>
           </div>
 
           <h3>Now make it adjustable</h3>
@@ -2610,16 +2648,15 @@ part  = plate.cut(hole(bore, thickness, at=plate.top.at(length / 2, width / 2)))
           <p>
             That last line is the payoff. <code>plate.top.at(length / 2, width / 2)</code> means <em>“on the
               plate's top face, halfway along and halfway across”</em>. Change <code>length</code> to
-            <code>60mm</code> and the hole stays centred, because its position was <em>worked out</em>
+            <code>60mm</code> and the hole stays centered, because its position was <em>worked out</em>
             rather than typed. In a mouse-driven program you would have dragged the hole. That thing after
             the dot is called an <a href="#anchors">anchor</a>, and it is covered properly below.
           </p>
 
           <div class="note">
             <span class="tag">There is nothing to work out on paper</span>
-            <p>Every save or pause in typing rebuilds and redraws in about a second, so a shape in the wrong place is
-              something
-              you see rather than something you calculate. Put it roughly where you think it goes, look,
+            <p>Every save or pause in typing rebuilds and redraws almost instantly, so a shape in the wrong place is
+              something you see rather than something you calculate. Put it roughly where you think it goes, look,
               adjust. That loop is the whole workflow.</p>
           </div>
         </section>
@@ -2643,7 +2680,7 @@ ratio = 10mm / 2mm        # fine — gives 5.0, a plain number
 gap   = 3mm + 1           # error: cannot add Length and Scalar</code></pre>
 
           <p>
-            That last line is refused rather than guessed at. One millimetre and one inch and one
+            That last line is refused rather than guessed at. One millimeter and one inch and one
             thou are all “1”, and a program that picks for you picks wrong eventually.
           </p>
           <p>
@@ -2846,9 +2883,9 @@ cylinder(6mm, 30mm, axis=(1, 0, 0))         # lying down, running along X</code>
             that keeps mattering later. All three meet at a point called the <strong>origin</strong>.
           </p>
           <p>
-            Nothing is centred on the origin. A box puts its <strong>lowest corner</strong> there and grows
+            Nothing is centered on the origin. A box puts its <strong>lowest corner</strong> there and grows
             away from it in all three directions, so <code>box(40mm, 20mm, 6mm)</code> fills x 0 → 40,
-            y 0 → 20 and z 0 → 6. A cylinder, a cone and a hex prism stand <em>on</em> the origin, centred
+            y 0 → 20 and z 0 → 6. A cylinder, a cone and a hex prism stand <em>on</em> the origin, centered
             about it, and grow upward.
           </p>
 
@@ -3131,7 +3168,7 @@ plate.top.at(10mm, 5mm)      # the point (10, 5, 3)</code></pre>
           </div>
 
           <p>
-            A cylinder anchors <strong>on its centre line</strong>, because a round face has no corner to
+            A cylinder anchors <strong>on its center line</strong>, because a round face has no corner to
             measure from. <code>cyl.top.at(0mm, 0mm)</code> is the middle of the far end.
           </p>
 
@@ -3199,7 +3236,8 @@ rib = outline.extruded(6mm)      # 1426.27mm2 of outline, 8557.59mm3, 7 faces</c
               <dt>profile(on=plate.top)</dt>
               <dd>Start drawing, in the plate's top face — the same <code>(u, v)</code> frame
                 <code>plate.top.at(10mm, 15mm)</code> already uses. Nothing about position or facing needs
-                saying twice.</dd>
+                saying twice.
+              </dd>
               <dt>.line_to(40mm, 0mm)</dt>
               <dd>A straight run from wherever the pen currently is to that point.</dd>
               <dt>.arc_to(48mm, 8mm, radius=8mm)</dt>
@@ -3230,8 +3268,8 @@ rib = outline.extruded(6mm)      # 1426.27mm2 of outline, 8557.59mm3, 7 faces</c
 
           <h3 id="profiles-arc">The radius is a direction, not just a size</h3>
           <p>
-            <code>radius=8mm</code> puts the arc's centre to the <strong>left</strong> of travel;
-            <code>-8mm</code> puts it to the <strong>right</strong>. A path turns toward its centre, so
+            <code>radius=8mm</code> puts the arc's center to the <strong>left</strong> of travel;
+            <code>-8mm</code> puts it to the <strong>right</strong>. A path turns toward its center, so
             positive is a left turn — and an outline drawn counter-clockwise, the usual way, turns left at
             every convex corner, which is why the unsigned, common case is the one you write with no
             ceremony. An arc is always the <strong>minor</strong> one: past a half turn, draw it as two arcs,
@@ -3289,7 +3327,7 @@ section.revolved(90deg, about=plate.top.u)     # a quarter of one</code></pre>
             extrudes upward and one drawn on <code>plate.bottom</code> extrudes downward, because the anchor
             already knows which way it faces. A negative height reverses it, which is what an extruded
             pocket-cutting tool wants. The result is an ordinary solid with two anchors of its own:
-            <code>top</code>, on the cap the sweep travelled to, still in the coordinates the outline was
+            <code>top</code>, on the cap the sweep traveled to, still in the coordinates the outline was
             drawn in; and <code>bottom</code>, on the outline's own plane.
           </p>
 
@@ -3340,12 +3378,14 @@ KernelError: straddler lies on both sides of top.u
     profile(on=top)        panel.slip:15      applied to</code></pre>
 
           <figure class="shot">
-            <img src="images/profile-inspector.png" alt="Profile extruded and shape inspected leads back to the line that made it." width="1400" height="800" />
+            <img src="images/profile-inspector.png"
+              alt="Profile extruded and shape inspected leads back to the line that made it." width="1400"
+              height="800" />
             <figcaption>Profile extruded and shape inspected leads back to the line that made it.</figcaption>
           </figure>
 
           <p>
-            That is also usable as a selector, which is the point of labelling a run in the first place —
+            That is also usable as a selector, which is the point of labeling a run in the first place —
             there is no way to ask the <em>geometry</em> for "the wall the nose radius made" the way you can
             ask for "every round face", because a part can easily have more than one round wall:
           </p>
@@ -3437,7 +3477,7 @@ part = part.cut(hole(3mm, 6mm, at=plate.top.at(10mm, 10mm)))  # drills the hole<
             <figure class="shot" style="margin:16px 0 0">
               <img src="images/unused-result.png" alt="…" width="1400" height="800" />
               <figcaption>What a thrown-away result looks like. The build succeeded — that is why this is worth being
-                able to recognise.</figcaption>
+                able to recognize.</figcaption>
             </figure>
           </div>
 
@@ -3530,7 +3570,8 @@ part  = stock.intersect(cylinder(40mm, 3mm, at=(20mm, 20mm, 0mm)))   # a ⌀40 d
             take from there.</p>
 
           <h3>Mirror</h3>
-          <pre class="file" data-name="arm.slip"><code class="slip">pair = arm.fuse(arm.mirrored(about=arm.left))    # 4084.38mm3, 12 faces</code></pre>
+          <pre class="file"
+            data-name="arm.slip"><code class="slip">pair = arm.fuse(arm.mirrored(about=arm.left))    # 4084.38mm3, 12 faces</code></pre>
           <p>
             <code>about=</code> takes an anchor — an anchor already <em>is</em> a plane, so a mirror needs
             no new kind of value — or a point on one, for a plane offset from a face rather than through it.
@@ -3555,7 +3596,8 @@ copy.top.at(6mm, 6mm)         # (-6, -6, 6), not (-6, 6, 6)</code></pre>
           </div>
 
           <figure class="shot">
-            <img src="images/mirror-pair.png" alt="Two of the same part, reflected rather than redrawn." width="1400" height="800" />
+            <img src="images/mirror-pair.png" alt="Two of the same part, reflected rather than redrawn." width="1400"
+              height="800" />
             <figcaption>Two of the same part, reflected rather than redrawn.</figcaption>
           </figure>
 
@@ -3592,12 +3634,13 @@ part  = plate.cut(vents)</code></pre>
           <div class="note">
             <span class="tag">Copies are fused together first</span>
             <p>A shape whose parts overlap is not a valid argument to a boolean, and OCCT will not tell you
-              so: a ring of copies turned about its own tool's centreline, every copy landing on the last,
+              so: a ring of copies turned about its own tool's centerline, every copy landing on the last,
               fused straight into a plate gave a solid of <strong>zero volume</strong> and reported success.
               Overlapping copies are an ordinary thing to want, so <code>pattern</code> and
               <code>polar_pattern</code> fuse their own copies before handing the tool over. Copies that
               merely touch keep their own faces — a plain fuse merges no coplanar faces — and copies that
-              coincide collapse into faces belonging to all of them rather than none.</p>
+              coincide collapse into faces belonging to all of them rather than none.
+            </p>
           </div>
 
           <h3>What a bad pattern tells you</h3>
@@ -3632,7 +3675,7 @@ KernelError: polar_pattern(about=…) needs an axis, not Anchor
           </p>
 
           <figure class="shot">
-            <img src="images/pattern-inspector.png" alt="…" width="1400" height="800" /> 
+            <img src="images/pattern-inspector.png" alt="…" width="1400" height="800" />
             <figcaption>One entry, with the copy named — not the fourth click of "which line was that one
               again".</figcaption>
           </figure>
@@ -3661,7 +3704,8 @@ raised = plate.fuse(label.extruded(0.6mm))     # 10862.72mm3, 116 faces</code></
           <figure class="shot">
             <img src="images/lettering-demo.png" alt="…" width="1400" height="800" />
             <figcaption>The same string, cut in on the left and fused on on the right — one call to
-              <code>text()</code>, two ways to use what it returns.</figcaption>
+              <code>text()</code>, two ways to use what it returns.
+            </figcaption>
           </figure>
 
           <h3>Reading that out loud</h3>
@@ -3718,7 +3762,8 @@ text("SPACED", height=5mm, on=plate.top, spacing=0.5mm)</code></pre>
 
           <h3>Which letter drew this wall</h3>
           <p>Selection reaches lettering exactly the way it reaches any other swept wall:</p>
-          <pre class="file" data-name="selecting"><code class="slip">sunk.faces(FromSegment("glyph 'S'"))     # 14 faces</code></pre>
+          <pre class="file"
+            data-name="selecting"><code class="slip">sunk.faces(FromSegment("glyph 'S'"))     # 14 faces</code></pre>
           <p>
             Every segment of one glyph carries the same label and the same source line — the honest answer,
             since nobody wrote a line for the curve of the <code>S</code>, they wrote the <code>text()</code>
@@ -3981,7 +4026,8 @@ thread(40mm, pitch=2mm, at=tube.top.at(0mm, 0mm), depth=12mm)           # bare d
               <code>D1 = D − 1.0825·P</code>, 60° flanks, a crest flat of <code>P/8</code> — so the minor
               diameters it cuts reproduce ISO 262's published figures rather than risking a second,
               hand-copied version of the same standard that could quietly disagree with it. Right-hand,
-              single start, no runout: each absent rather than approximated.</p>
+              single start, no runout: each absent rather than approximated.
+            </p>
           </div>
 
           <h3>A design clearance, not a printer reading</h3>
@@ -4044,11 +4090,13 @@ thread(40mm, pitch=2mm, at=tube.top.at(0mm, 0mm), depth=12mm)           # bare d
               different kind of problem — a hand-built 6-turn ⌀40 thread used as an ordinary
               <code>cut(tool, fit=free)</code> tool runs for about 215 seconds and then fails outright, with
               <em>"the offset left a null shape."</em> Reach for <code>thread()</code> itself; it never grows
-              a solid after the fact.</p>
+              a solid after the fact.
+            </p>
           </div>
 
           <h3 id="tapping-hole">Tapping holes, for the sizes a thread cannot print</h3>
-          <pre class="file" data-name="boss.slip"><code class="slip">boss = boss.add(tapping_hole(M3, at=boss.top.at(0mm, 0mm), depth=8mm))</code></pre>
+          <pre class="file"
+            data-name="boss.slip"><code class="slip">boss = boss.add(tapping_hole(M3, at=boss.top.at(0mm, 0mm), depth=8mm))</code></pre>
           <p>
             The feature for a machine screw. It cuts a plain hole at the tap-drill diameter
             <code>D − P</code> — 2.5mm for an M3, 6.75mm for an M8 — and the screw forms its own thread on the
@@ -4065,7 +4113,8 @@ thread(40mm, pitch=2mm, at=tube.top.at(0mm, 0mm), depth=12mm)           # bare d
           </p>
 
           <figure class="shot">
-            <img src="images/tapping-hole.png" alt="No helix in the model. The screw makes the thread on the way in." width="1400" height="800" />
+            <img src="images/tapping-hole.png" alt="No helix in the model. The screw makes the thread on the way in."
+              width="1400" height="800" />
             <figcaption>No helix in the model. The screw makes the thread on the way in.</figcaption>
           </figure>
 
@@ -4108,7 +4157,7 @@ thread(40mm, pitch=2mm, at=tube.top.at(0mm, 0mm), depth=12mm)           # bare d
 
           <p>
             <code>solid.edges(…)</code> and <code>solid.faces(…)</code> take a description of which ones you
-            mean. Each name in the catalogue below is one test, and three symbols glue tests together:
+            mean. Each name in the catalog below is one test, and three symbols glue tests together:
           </p>
 
           <div class="tbl">
@@ -4222,7 +4271,7 @@ plate.faces(FacingUp)                    # 1</code></pre>
 
           <p>
             Counts are for a 40 × 20 × 3 plate with one ⌀6 hole through the middle of it. Everything here
-            is built from the catalogue below — none of it is special.
+            is built from the catalog below — none of it is special.
           </p>
 
           <div class="tbl">
@@ -4279,7 +4328,7 @@ plate.faces(FacingUp)                    # 1</code></pre>
             </table>
           </div>
 
-          <h3>The catalogue</h3>
+          <h3>The catalog</h3>
           <div class="tbl">
             <table>
               <thead>
@@ -4502,7 +4551,8 @@ plate.edges(Vertical, expect=3)     # SelectionError: expected 3 edges, matched 
           <p class="sub">Turn a solid block into a shell of it, to a wall thickness you choose, with a face or two
             left open to get inside.</p>
 
-          <pre class="file" data-name="case.slip"><code class="slip">case = box(60mm, 40mm, 25mm).shelled(2mm, open=TopFace)     # 13632mm3, 11 faces</code></pre>
+          <pre class="file"
+            data-name="case.slip"><code class="slip">case = box(60mm, 40mm, 25mm).shelled(2mm, open=TopFace)     # 13632mm3, 11 faces</code></pre>
 
           <p>
             Six faces outside, five in, and the rim the opening left behind — a 20mm cube's worth of
@@ -4510,18 +4560,22 @@ plate.edges(Vertical, expect=3)     # SelectionError: expected 3 edges, matched 
             one face open and, as everywhere else a face gets picked out, it is a
             <a href="#select">description</a> rather than a click:
           </p>
-          <pre class="file" data-name="tube.slip"><code class="slip">tube = box(60mm, 40mm, 25mm).shelled(2mm, open=TopFace | BottomFace, expect=2)</code></pre>
+          <pre class="file"
+            data-name="tube.slip"><code class="slip">tube = box(60mm, 40mm, 25mm).shelled(2mm, open=TopFace | BottomFace, expect=2)</code></pre>
 
           <div class="note warn">
             <span class="tag"><code>open=</code> is required, never defaulted</span>
             <p>A shell with nothing open is a sealed void — invisible, unreachable, and indistinguishable
               from having forgotten the argument. It is also the one shell that needs no shell:
               <code>body.cut(inner)</code> already gives you a sealed cavity, with better provenance and no
-              new operation. What <code>shelled</code> is for is the opening.</p>
+              new operation. What <code>shelled</code> is for is the opening.
+            </p>
           </div>
 
           <figure class="shot">
-            <img src="images/shell-xray.png" alt="A shelled case with X-ray turned on so you can see the floor of the opening" width="1400" height="800" />
+            <img src="images/shell-xray.png"
+              alt="A shelled case with X-ray turned on so you can see the floor of the opening" width="1400"
+              height="800" />
             <figcaption>The same question X-ray already answers for a cut - “did that actually happen” -
               answered for a shell.</figcaption>
           </figure>
@@ -4565,7 +4619,8 @@ case.faces(FromSegment("nose radius"), expect=2)           # the wall, outside a
       profile(on=top)      case.slip:15      applied to</code></pre>
 
           <figure class="shot">
-            <img src="images/shell-inspector.png" alt="Shelled extrusion keeps the history of what made it" width="1400" height="800" />
+            <img src="images/shell-inspector.png" alt="Shelled extrusion keeps the history of what made it" width="1400"
+              height="800" />
             <figcaption>The chain above, as the app actually draws it.</figcaption>
           </figure>
 
@@ -4921,7 +4976,7 @@ def standoff(height=10mm, outer=9mm, bore=3.2mm):
           <p>
             Dials are named, so you set the ones you care about and skip the rest, in any order. That is the
             same <code>name=value</code> arrangement <a href="#shapes"><code>at=</code> and
-              <code>axis=</code></a> use, for the same reason — and it is the whole of the parameterisation
+              <code>axis=</code></a> use, for the same reason — and it is the whole of the parameterization
             mechanism. There is nothing else to learn.
           </p>
 
@@ -5105,12 +5160,13 @@ part = plate.cut(servo.grown(0.4mm))     # 0.4mm of clearance all round, then cu
 
           <!-- REPLACE ME: <img src="images/step-import.png" alt="…" width="1400" height="800" /> -->
           <figure class="shot">
-            <img src="images/step-import.png" alt="Servo solid read from a STEP file instead of built from primitives." width="1400" height="800" />
+            <img src="images/step-import.png" alt="Servo solid read from a STEP file instead of built from primitives."
+              width="1400" height="800" />
             <figcaption>An ordinary solid, read from a file instead of built from primitives.</figcaption>
           </figure>
 
           <p>
-            <strong>Millimetres, whatever the file says.</strong> A STEP declares its own unit and the
+            <strong>Millimeters, whatever the file says.</strong> A STEP declares its own unit and the
             reader converts on the way in: a 25.4-unit cube in a file declared in inches arrives as
             <strong>645.16mm</strong>, which is what it really is. Nothing about a part that comes in
             25.4× too large <em>fails</em> — it simply does not fit — so that conversion is the one thing
@@ -5139,7 +5195,8 @@ bearing = bearing.with_anchor("far_face", bearing.origin.at(0mm, 0mm).offset(7mm
   = use_step("FAULHABER_2342L-012CPR.step", "…") picks one: Main Motor, Top,
     Thin shaft, Thick shaft, Cage, Gear, White, Plastic protector, Black box,
     Metal, Plastic protector 2, Plastic gear ×2, and 21 more</code></pre>
-          <pre class="file" data-name="motor-mount.slip"><code class="slip">housing = use_step("./vendor/FAULHABER_2342L-012CPR.step", "Top")</code></pre>
+          <pre class="file"
+            data-name="motor-mount.slip"><code class="slip">housing = use_step("./vendor/FAULHABER_2342L-012CPR.step", "Top")</code></pre>
           <p>
             Taking the first silently would be exactly the wrong-but-confident answer this tool refuses
             everywhere else, and it is not a hypothetical worry: the first solid in that gearmotor file is
@@ -5151,7 +5208,8 @@ bearing = bearing.with_anchor("far_face", bearing.origin.at(0mm, 0mm).offset(7mm
           <ul>
             <li><b>A name shared by several solids.</b> That same gearmotor carries nine solids all called
               <code>Gear 4mm int diam</code>; the file gives them one name, so nothing here can tell them
-              apart, and it says so rather than silently picking one.</li>
+              apart, and it says so rather than silently picking one.
+            </li>
             <li><b>A file with no solids in it.</b> A surface model is an export setting somebody chose
               upstream, and the error counts the shells and faces it <em>did</em> find — "this file is
               surfaces" and "this file transferred nothing" call for two different fixes.</li>
@@ -5180,7 +5238,8 @@ bearing = bearing.with_anchor("far_face", bearing.origin.at(0mm, 0mm).offset(7mm
               build time on a large one — the Raspberry Pi board above took 14.8 seconds on first read and is
               free on every rebuild after, from the same op cache everything else uses. See
               <a href="#trust">Opening a file is not running it</a> for how it is disclosed differently from
-              a <code>.slip</code>.</p>
+              a <code>.slip</code>.
+            </p>
           </div>
         </section>
 
@@ -5191,7 +5250,8 @@ bearing = bearing.with_anchor("far_face", bearing.origin.at(0mm, 0mm).offset(7mm
           <p class="sub"><code>part</code> has always named the one solid a model produces. It may now name
             several, and each becomes an object in the file it exports to.</p>
 
-          <pre class="file" data-name="jar-and-cap.slip"><code class="slip">part = assembly(body=jar, lid=cap)</code></pre>
+          <pre class="file"
+            data-name="jar-and-cap.slip"><code class="slip">part = assembly(body=jar, lid=cap)</code></pre>
 
           <p>
             A bare solid bound to <code>part</code> still means exactly what it always did — this is a
@@ -5270,7 +5330,8 @@ bearing = bearing.with_anchor("far_face", bearing.origin.at(0mm, 0mm).offset(7mm
             <p>With two or more bodies on screen, the inspector title is qualified by name —
               <code>lid · planar · face 3</code> rather than just <code>planar · face 3</code> — because
               "which one did I just click" is the first question a pick raises once there is more than one
-              thing to click.</p>
+              thing to click.
+            </p>
           </div>
         </section>
 
@@ -5342,7 +5403,7 @@ clearance  pin ↔ lid    0.2mm</code></pre>
               <b>Image goes here</b>
               <em>images/clearance-report.png · 1400 × 500</em>
               <span>The export report's clearance section: three rows in the pairwise scan above, the
-                declared press fit with its verdict picked out in colour, the two undeclared pairs shown
+                declared press fit with its verdict picked out in color, the two undeclared pairs shown
                 plainly with no tick or cross against them.</span>
             </div>
             <figcaption>A measurement with no verdict is not a lesser row — it is the honest answer to a
@@ -5362,7 +5423,7 @@ clearance  pin ↔ lid    0.2mm</code></pre>
         <section id="hardware">
           <p class="sec-kicker">Parts that fit</p>
           <h2>Bolts, nuts and inserts</h2>
-          <p class="sub">Three words that say what goes in the hole, and let the millimetres be decided later.</p>
+          <p class="sub">Three words that say what goes in the hole, and let the millimeters be decided later.</p>
 
           <pre class="file" data-name="bracket.slip"><code class="slip">bed_face(plate.bottom)
 
@@ -5376,7 +5437,7 @@ part = plate.add(
 
           <figure class="shot">
             <img src="images/hardware-features.png" alt="…" width="1400" height="800" />
-            <figcaption>Three words, three different holes. None of the millimetres are in the file.</figcaption>
+            <figcaption>Three words, three different holes. None of the millimeters are in the file.</figcaption>
           </figure>
 
           <div class="tbl">
@@ -5414,7 +5475,8 @@ part = plate.add(
               <code>tapping_hole()</code> live under <a href="#threads">Threads</a>, back in
               <em>Writing a .slip</em>. They are sized like the rest of this page, but they are not
               <em>compensated</em> like it: nothing here is measured off a gauge, because a printed thread's
-              other half is printed too.</p>
+              other half is printed too.
+            </p>
           </div>
 
           <h3><code>fit=</code> — how tight the bolt hole is</h3>
@@ -5836,7 +5898,7 @@ part = plate.add(
                   <span>The Gauges section: three blocks, each with its name, its estimate, a row of station buttons,
                     its question, and the <code>wrote …</code> line under it after writing.</span>
                 </div>
-                <figcaption>The stations are greyed out until a profile exists — there would be nowhere to record an
+                <figcaption>The stations are grayed out until a profile exists — there would be nowhere to record an
                   answer.</figcaption>
               </figure>
 
@@ -5938,7 +6000,7 @@ part = plate.add(
                 it needs to be.
               </p>
 
-              
+
               <figure class="shot">
                 <img src="images/gauge-strip.png" alt="…" width="1400" height="800" />
                 <figcaption>The measurement is a bolt and a fingertip. There is no caliper anywhere in this loop.
@@ -5982,7 +6044,7 @@ part = plate.add(
                 <p>More notches means a <strong>tighter</strong> pocket, because a heat-set pocket has to be
                   smaller than the knurl for the melted plastic to grip it. Its six stations are your own
                   configured knurl stepped down by 4.3% to 15.2% — a proportion rather than a fixed set of
-                  millimetres, because an insert is set by melting a volume, and six fixed tenths would
+                  millimeters, because an insert is set by melting a volume, and six fixed tenths would
                   bracket the answer on an M3 and measure nothing at all on an M12.</p>
                 <p>This gauge also destroys itself as you use it, so do it last and work in order.</p>
               </div>
@@ -5993,7 +6055,7 @@ part = plate.add(
               <p>
                 That is the whole of the measurement. Go back to the <strong>Gauges</strong> section and
                 press the station button whose number matches the one the hardware went into. There is
-                nothing to type and no millimetres to work out — the panel sends the station, and the
+                nothing to type and no millimeters to work out — the panel sends the station, and the
                 figure that becomes your measurement comes from the code that built the thing you printed
                 rather than from anything on screen.
               </p>
@@ -6070,7 +6132,7 @@ part = plate.add(
               <p>
                 Back in <strong>Profile</strong>, type the material into the small box at the bottom of the
                 panel and press <strong>inherit PLA</strong>. It borrows the reference material's readings
-                and is labelled <em>inherited, unverified</em> from that moment on.
+                and is labeled <em>inherited, unverified</em> from that moment on.
               </p>
               <p>
                 To correct it properly you reprint just the bolt-clearance gauge in the new material, find
@@ -6165,7 +6227,7 @@ correction: +0.05</code></pre>
         <section id="export">
           <p class="sec-kicker">Parts that fit</p>
           <h2>Export and print</h2>
-          <p class="sub">Where intent finally becomes millimetres. <strong>File ▸ Export</strong>, or <span
+          <p class="sub">Where intent finally becomes millimeters. <strong>File ▸ Export</strong>, or <span
               class="kbd">Ctrl/Cmd + E</span>.</p>
 
           <h3>Picking a format</h3>
@@ -6242,7 +6304,7 @@ correction: +0.05</code></pre>
             Two things decide what lands in the file, and both are already on screen. The <strong>text in
               the editor</strong> is what gets exported — not the last successful build — so what you can see
             is what gets written. And the <strong>showing</strong> control decides the numbers: export with
-            it on <code>nominal</code> and you get the millimetres you typed; export with a printer selected
+            it on <code>nominal</code> and you get the millimeters you typed; export with a printer selected
             and you get that printer's — for 3MF and STL. A STEP ignores <strong>showing</strong> entirely;
             <a href="#step-export">more below</a>.
           </p>
@@ -6257,7 +6319,7 @@ correction: +0.05</code></pre>
           <h3>The report</h3>
           <p>
             A report opens over the viewport every time you export, and it is worth reading rather than
-            dismissing. It is the only place that tells you the file is <em>not</em> the millimetres you
+            dismissing. It is the only place that tells you the file is <em>not</em> the millimeters you
             typed, where each changed number came from, and what your slicer is being told:
           </p>
 
@@ -6379,7 +6441,8 @@ correction: +0.05</code></pre>
                 overlapping or nested; on the right "arranged for printing", the same three bodies stood
                 upright on their bed faces and spaced on a grid.</span>
             </div>
-            <figcaption>Not a preference in a dialog — a parameter, named on the report next to the profile.</figcaption>
+            <figcaption>Not a preference in a dialog — a parameter, named on the report next to the profile.
+            </figcaption>
           </figure>
 
           <p>
@@ -6470,7 +6533,7 @@ correction: +0.05</code></pre>
               across material, which is the wall of a nut trap or the gap across a hole. A tapering or curved
               thin region between faces that never face each other is not found, and a clean row says exactly
               that: <code>nothing under 0.8mm</code>, not a claimed minimum. The overhang angle is sampled
-              once per face at its centre, so a fillet blending a wall into a ceiling — which passes through
+              once per face at its center, so a fillet blending a wall into a ceiling — which passes through
               90° by construction — is not flagged the way a flat ceiling of the same size would be.</p>
           </div>
 
@@ -6566,7 +6629,8 @@ correction: +0.05</code></pre>
                 this page, but with "profile nominal" and the orange "written as designed" warning in place
                 of a compensation table, so the two report styles read as clearly different at a glance.</span>
             </div>
-            <figcaption>The report says a printer was <em>not</em> applied, rather than staying silent about it.</figcaption>
+            <figcaption>The report says a printer was <em>not</em> applied, rather than staying silent about it.
+            </figcaption>
           </figure>
 
           <p>
@@ -6580,7 +6644,7 @@ correction: +0.05</code></pre>
             format was chosen to keep — the whole B-rep survives the round trip, not a tessellation of it.
             Each body is written with a name in the file's own <code>PRODUCT</code> record, which is what
             lets <a href="#step"><code>use_step(path, "lid")</code></a> pick a body back out of a file Slipfit
-            itself wrote. Units are always explicit millimetres, whatever unit a reader might otherwise
+            itself wrote. Units are always explicit millimeters, whatever unit a reader might otherwise
             assume.
           </p>
 
@@ -6707,7 +6771,7 @@ correction: +0.05</code></pre>
             </table>
           </div>
           <p>
-            Three colours, three claims: <strong>selected</strong> (the face you clicked),
+            Three colors, three claims: <strong>selected</strong> (the face you clicked),
             <strong>lit</strong> (what the current line or entry produced), and <strong>failing</strong>
             (what an operation choked on).
           </p>
@@ -6718,7 +6782,7 @@ correction: +0.05</code></pre>
           <pre class="msg"><code>showing [nominal ▾]                    hole 3.00mm
 showing [● kobra-s1-0.4 · PLA ▾]       hole 3.20mm    as printed</code></pre>
           <p>
-            It is a <strong>rebuild with a profile bound</strong>, not a re-colouring of what is already on
+            It is a <strong>rebuild with a profile bound</strong>, not a re-coloring of what is already on
             screen. Everything whose inputs did not move comes back instantly from cache, so the second
             version is cheap. The footer always says which of the two you are looking at.
           </p>
@@ -6844,9 +6908,9 @@ click         the plate's bottom
           <div class="note">
             <span class="tag">Ambiguous cases read as a bore, not a fillet</span>
             <p>A face can point back at its own axis two ways, and where that is genuinely unclear the pin
-              reads ⌀ rather than R. A fillet mislabelled ⌀ is a misprint a shop will catch by eye; a bore
-              mislabelled R is a part machined to half the size it needs — the two mistakes are not equally
-              bad, so the tie-break favours the one that is merely embarrassing.</p>
+              reads ⌀ rather than R. A fillet mislabeled ⌀ is a misprint a shop will catch by eye; a bore
+              mislabeled R is a part machined to half the size it needs — the two mistakes are not equally
+              bad, so the tie-break favors the one that is merely embarrassing.</p>
           </div>
 
           <!-- REPLACE ME: <img src="images/measure-tool.png" alt="…" width="1400" height="800" /> -->
@@ -6864,9 +6928,9 @@ click         the plate's bottom
 
           <h3>Moving a pin, and losing one on purpose</h3>
           <p>
-            Click a pin to select it. <span class="kbd">↑</span> <span class="kbd">↓</span> <span
-              class="kbd">←</span> <span class="kbd">→</span> nudge it, dragging moves it by hand, and <span
-              class="kbd">Delete</span> removes it. <span class="kbd">Esc</span> drops the selection before
+            Click a pin to select it. <span class="kbd">↑</span> <span class="kbd">↓</span> <span class="kbd">←</span>
+            <span class="kbd">→</span> nudge it, dragging moves it by hand, and <span class="kbd">Delete</span> removes
+            it. <span class="kbd">Esc</span> drops the selection before
             it does anything else.
           </p>
           <p>
@@ -7035,7 +7099,7 @@ part = part.finish(chamfer(TopRim, 0.6mm, expect=4))</code></pre>
           </div>
 
           <div class="ex">
-            <div class="ex-hd"><span class="n">Six · intent instead of millimetres</span>
+            <div class="ex-hd"><span class="n">Six · intent instead of millimeters</span>
               <h3>All three features, and what <code>fit=</code> decides</h3>
               <p>The same plate, five different declarations of what goes in each hole.</p>
             </div>
@@ -7463,7 +7527,8 @@ polar_pattern(tool, *, count, about)             # a ring of copies, dividing a 
                 <tr>
                   <td><code>.mirrored(about)</code></td>
                   <td>The reflected copy — <code>about</code> is an anchor or a point on one.
-                    <a href="#mirror-patterns">More.</a></td>
+                    <a href="#mirror-patterns">More.</a>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -7593,7 +7658,7 @@ Quantity(value, "mm")                  # what a unit literal becomes</code></pre
               <tbody>
                 <tr>
                   <td><code>docs/language.md</code></td>
-                  <td>Units, the dimension system, precision, the full error catalogue.</td>
+                  <td>Units, the dimension system, precision, the full error catalog.</td>
                 </tr>
                 <tr>
                   <td><code>docs/modelling.md</code></td>
@@ -7634,11 +7699,12 @@ Quantity(value, "mm")                  # what a unit literal becomes</code></pre
           </div>
         </section>
 
+
         <footer class="foot">
           <a class="wordmark" href="#top">SLIP<span>FIT</span></a>
           <p>
-            A code-centric parametric modeller for functional printed parts. The code holds intent, your
-            profile holds your workshop, and the millimetres are resolved at export.
+            A code-centric parametric modeler for functional printed parts. The code holds intent, your
+            profile holds your workshop, and the millimeters are resolved at export.
           </p>
           <p>
             Every example on this page was executed against the kernel before it was written down.
@@ -7650,6 +7716,7 @@ Quantity(value, "mm")                  # what a unit literal becomes</code></pre
       </div>
     </main>
   </div>
+
 
   <script>
     /* ------------------------------------------------------------ nav ------ */
@@ -7753,19 +7820,19 @@ Quantity(value, "mm")                  # what a unit literal becomes</code></pre
 
     /* ------------------------------------------------- .slip highlighting -- */
     /* slipfit:vocabulary — generated by `python -m slipfit.lang.grammar --site`; do not edit */
-const UNITS = 'cm2|cm3|deg|in2|in3|mm2|mm3|rad|cm|in|m2|m3|mm|m';
-const DEC = '(?:\\d[\\d_]*(?:\\.[\\d_]*)?|\\.\\d[\\d_]*)';
-const INT = '\\d[\\d_]*';
-const NAMES = new Set(('Anything AtHeight BottomFace BottomRim Circular Conical Cylindrical Diameter Facing FacingDown '
- + 'FacingUp FromSegment Highest Horizontal Linear LongerThan Lowest Not OnFace OnOuterWire Planar '
- + 'Radius ShorterThan SurfaceIs Swept TopFace TopRim Touching Vertical box chamfer clearance cone '
- + 'cylinder fillet hex_prism hole overlap pattern polar_pattern profile DIN_912 DIN_934 DIN_985 '
- + 'ISO_7380 M10 M12 M2 M2_5 M3 M4 M5 M6 M8 bolt_hole heat_insert nut_trap tapping_hole text thread '
- + 'bed_face close free press Dim Quantity acos asin atan atan2 cos expect_dim pi sin sqrt tan tau '
- + 'assembly part use use_step').split(' '));
-const KW = new Set(('False None True and as assert async await break class continue def del elif else except finally '
- + 'for from global if import in is lambda nonlocal not or pass raise return try while with yield').split(' '));
-/* slipfit:/vocabulary */
+    const UNITS = 'cm2|cm3|deg|in2|in3|mm2|mm3|rad|cm|in|m2|m3|mm|m';
+    const DEC = '(?:\\d[\\d_]*(?:\\.[\\d_]*)?|\\.\\d[\\d_]*)';
+    const INT = '\\d[\\d_]*';
+    const NAMES = new Set(('Anything AtHeight BottomFace BottomRim Circular Conical Cylindrical Diameter Facing FacingDown '
+      + 'FacingUp FromSegment Highest Horizontal Linear LongerThan Lowest Not OnFace OnOuterWire Planar '
+      + 'Radius ShorterThan SurfaceIs Swept TopFace TopRim Touching Vertical box chamfer clearance cone '
+      + 'cylinder fillet hex_prism hole overlap pattern polar_pattern profile DIN_912 DIN_934 DIN_985 '
+      + 'ISO_7380 M10 M12 M2 M2_5 M3 M4 M5 M6 M8 bolt_hole heat_insert nut_trap tapping_hole text thread '
+      + 'bed_face close free press Dim Quantity acos asin atan atan2 cos expect_dim pi sin sqrt tan tau '
+      + 'assembly part use use_step').split(' '));
+    const KW = new Set(('False None True and as assert async await break class continue def del elif else except finally '
+      + 'for from global if import in is lambda nonlocal not or pass raise return try while with yield').split(' '));
+    /* slipfit:/vocabulary */
 
     const RE = new RegExp([
       '(#[^\\n]*)',
@@ -7800,6 +7867,17 @@ const KW = new Set(('False None True and as assert async await break class conti
     }
     document.querySelectorAll('code.slip').forEach(el => { el.innerHTML = highlight(el.textContent); });
   </script>
+
+  <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+  <script>
+    kofiWidgetOverlay.draw('codechomper', {
+      'type': 'floating-chat',
+      'floating-chat.donateButton.text': 'Support me',
+      'floating-chat.donateButton.background-color': '#f45d22',
+      'floating-chat.donateButton.text-color': '#fff'
+    });
+  </script>
+
 </body>
 
 </html>
