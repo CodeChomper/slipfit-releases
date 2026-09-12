@@ -2181,7 +2181,7 @@
               </div>
             </div>
             <div class="app-foot">1,914 triangles · 24 faces · 12 ops · cache 9/12 · as printed · kobra-s1-0.4-pla r7
-              (measured, rev 7) · 1 compensated</div>
+              (measured, rev 7) · 1 compensated&nbsp;&nbsp;&nbsp;♥ Support</div>
           </div>
 
           <div class="callout">
@@ -2193,7 +2193,8 @@
             <b>viewport</b><span>the built part. Z is up and the grid is the bed, so “which way up” is never
               ambiguous.</span>
             <b>inspector</b><span>opens when you click a face. It tells you why that face is there.</span>
-            <b>footer</b><span>how big the build is, and which printer the numbers came from.</span>
+            <b>footer</b><span>how big the build is, which printer the numbers came from, and a standing
+              <em>♥ Support</em> link.</span>
           </div>
 
           <h3>Moving the camera</h3>
@@ -2296,6 +2297,9 @@
               reverses orbit horizontally, orbit vertically, pan horizontally, pan vertically and the zoom
               wheel — five separate switches, because the usual complaint is about one axis and flipping all
               of them fixes the wrong thing.</p>
+            <p>The same sheet carries the theme picker — a handful of built-in themes including a light one,
+              with <em>Duplicate</em> to make one you can edit and export. <a href="#reference"><code>docs/shell.md</code></a>
+              has the detail.</p>
             <p>The settings are stored in the <em>application</em> and don't move with your <code>.slip</code> files.
             </p>
           </div>
@@ -2376,7 +2380,7 @@
                 <tr>
                   <td>File ▸ Settings…</td>
                   <td class="num">Ctrl/Cmd + ,</td>
-                  <td>Which way the mouse turns the camera.</td>
+                  <td>Which way the mouse turns the camera, and the editor/viewport theme.</td>
                 </tr>
                 <tr>
                   <td>Build ▸ Rebuild</td>
@@ -2405,6 +2409,17 @@
                   <td>Shows edges hidden inside the solid — the quickest way to tell whether a hole actually got cut.
                     Like <code>F</code> (frame the part) and <code>A</code> (cycle the anchors), it is a bare letter, so
                     it acts on the 3D view only when you are not typing in the editor.</td>
+                </tr>
+                <tr>
+                  <td>Help ▸ Documentation…</td>
+                  <td class="num">—</td>
+                  <td>Opens this guide in your browser.</td>
+                </tr>
+                <tr>
+                  <td>Help ▸ Support Slipfit…</td>
+                  <td class="num">—</td>
+                  <td>Slipfit is free and complete; this is the one place that asks. No prompt, no reminder — a
+                    menu item and nothing else.</td>
                 </tr>
               </tbody>
             </table>
@@ -3744,11 +3759,12 @@ raised = plate.fuse(label.extruded(0.6mm))     # 10862.72mm3, 116 faces</code></
           <pre class="file" data-name="lettering"><code class="slip">text("O", height=8mm, on=plate.top)     # 1 profile, 2 wires
 text("i", height=8mm, on=plate.top)     # 2 profiles, 1 wire each
 
-text("M3", height=5mm, on=lid.top.at(0mm, 0mm), align="centre")
+text("M3", height=5mm, on=lid.top.at(0mm, 0mm), align="center")
 text("SPACED", height=5mm, on=plate.top, spacing=0.5mm)</code></pre>
           <p>
-            <code>align</code> is <code>"left"</code> (the default), <code>"centre"</code> or
-            <code>"right"</code>, and says where the point you gave sits along the string.
+            <code>align</code> is <code>"left"</code> (the default), <code>"center"</code> or
+            <code>"right"</code>, and says where the point you gave sits along the string. The
+            British spelling <code>"centre"</code> is accepted too.
             <code>spacing</code> tracks the whole string apart.
           </p>
           <div class="note warn">
@@ -4036,7 +4052,7 @@ thread(40mm, pitch=2mm, at=tube.top.at(0mm, 0mm), depth=12mm)           # bare d
             untouched — but unlike everywhere else <code>fit</code> comes off a gauge, this is
             <strong>design clearance from <a href="#fitted">Config › Hardware › Fits</a></strong>. Both
             halves of a printed thread come off the same nozzle: there is no unprinted bolt for a measurement
-            to compensate towards, so a thread reads the same number an ordinary
+            to compensate toward, so a thread reads the same number an ordinary
             <code>cut(tool, fit=free)</code> already uses between two of your own parts.
           </p>
           <p>
@@ -7026,8 +7042,8 @@ part = part.cut(hole(4mm, thickness, at=plate.top.at(10mm, width / 2)))
 part = part.cut(hole(4mm, thickness, at=plate.top.at(50mm, width / 2)))
 
 # A named anchor, so a later feature has somewhere to refer to.
-part = part.with_anchor("centre", plate.top.at(length / 2, width / 2))
-part = part.cut(hole(8mm, 3mm, at=part.centre))</code></pre>
+part = part.with_anchor("center", plate.top.at(length / 2, width / 2))
+part = part.cut(hole(8mm, 3mm, at=part.center))</code></pre>
             <div class="ex-ft"><span class="ok">✓ builds</span><span>60 × 30 ×
                 6mm</span><span>10498.41mm³</span><span>10 faces</span></div>
           </div>
@@ -7058,7 +7074,7 @@ part = part.finish(
               <h3>A vented plate</h3>
               <p>A recipe that hands back a list of positions, and two loops placing 18 holes.</p>
             </div>
-            <pre><code class="slip"># Loops and functions: a vented plate whose hole field re-centres itself.
+            <pre><code class="slip"># Loops and functions: a vented plate whose hole field re-centers itself.
 
 width     = 70mm
 depth     = 45mm
@@ -7069,7 +7085,7 @@ pitch     = 10mm
 
 
 def spread(span, margin, pitch):
-    """Offsets across `span`, inset by `margin`, centred on what is left over."""
+    """Offsets across `span`, inset by `margin`, centered on what is left over."""
     usable = span - margin * 2
     count = int(usable / pitch) + 1              # Length / Length is a float
     start = margin + (usable - pitch * (count - 1)) / 2
@@ -7110,25 +7126,25 @@ width     = 28mm
 thickness = 6mm
 
 plate = box(length, width, thickness)
-centre = width / 2
+center = width / 2
 
 bed_face(plate.bottom)
 
 part = plate.add(
     # `free` — the bolt has to pass through. Compensated from the clearance gauge.
-    bolt_hole(M3, at=plate.top.at(10mm, centre), fit=free),
+    bolt_hole(M3, at=plate.top.at(10mm, center), fit=free),
 
     # `close` — a locating fit; the bolt is a dowel here, not a fastener.
-    bolt_hole(M3, at=plate.top.at(22mm, centre), fit=close),
+    bolt_hole(M3, at=plate.top.at(22mm, center), fit=close),
 
     # No fit at all: 4mm means 4mm on every machine, on every printer.
-    bolt_hole(M3, at=plate.top.at(34mm, centre), fit=None, depth=4mm),
+    bolt_hole(M3, at=plate.top.at(34mm, center), fit=None, depth=4mm),
 
     # A captive nut, entered from the underside.
-    nut_trap(M3, at=plate.bottom.at(46mm, centre)),
+    nut_trap(M3, at=plate.bottom.at(46mm, center)),
 
     # A heat-set insert on a raised boss.
-    heat_insert(M3, at=plate.top.at(60mm, centre), boss=True),
+    heat_insert(M3, at=plate.top.at(60mm, center), boss=True),
 )
 
 part = part.finish(
@@ -7167,7 +7183,7 @@ lip_gap = 0.2mm          # clearance so the lid actually drops in
 
 # ---------------------------------------------------------------- the vents
 vent_af  = 5mm           # hexagon, across the flats
-vent_web = 1.8mm         # plastic left between neighbours
+vent_web = 1.8mm         # plastic left between neighbors
 field_x  = 40mm
 field_y  = 26mm
 
@@ -7176,7 +7192,7 @@ outer_y = inner_y + wall * 2
 
 
 def honeycomb(width, height, across_flats, web):
-    """Centres of a hex field that fits inside `width` x `height`.
+    """Centers of a hex field that fits inside `width` x `height`.
 
     Rows are spaced by √3/2 of the pitch and every other one is shifted half a
     pitch across — which is what makes the cells nest instead of stack.
@@ -7680,7 +7696,7 @@ Quantity(value, "mm")                  # what a unit literal becomes</code></pre
                 </tr>
                 <tr>
                   <td><code>docs/shell.md</code></td>
-                  <td>The window, trust, rebuilds, tabs, the editor, the viewport, section and measuring.</td>
+                  <td>The window, trust, rebuilds, tabs, the editor, the viewport, section, measuring and themes.</td>
                 </tr>
                 <tr>
                   <td><code>docs/inspector.md</code></td>
