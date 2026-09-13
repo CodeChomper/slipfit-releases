@@ -1,0 +1,52 @@
+Copyright (c) 2026 Jason Stuart Forsythe, doing business as CodeChomper. All
+rights reserved.
+
+This repository contains:
+
+  1. The Slipfit documentation and release site (index.html, support.html,
+     images/, and associated assets) — collectively, the "Site".
+  2. Compiled Slipfit application installers distributed via this
+     repository's Releases page ("installs/" and GitHub Releases assets) —
+     the "Software".
+
+The "Slipfit" name and logo are trademarks of the copyright holder and are
+not licensed under this file. Use of the name "Slipfit" or the Slipfit logo
+to identify any product, fork, or distribution other than an unmodified
+copy obtained from this repository or its official Releases page is not
+permitted.
+
+SITE
+
+Permission is granted to view, share links to, and quote brief excerpts of
+the Site for non-commercial purposes, with attribution to the original
+repository. Reproducing, rehosting, or redistributing the Site, or a
+substantial portion of it, as your own work or under a different name is
+not permitted without prior written permission.
+
+SOFTWARE
+
+Permission is granted to download and run the Software, obtained only from
+this repository's official Releases page, for personal or internal use.
+
+Except as expressly permitted above, no permission is granted to:
+
+  - redistribute the Software, in original or modified form, whether free
+    or paid, through any channel other than this repository;
+  - decompile, disassemble, or extract the Software's contents (including
+    unpacking any packaged archive) for the purpose of creating a
+    derivative or competing distribution;
+  - rebrand, relabel, or otherwise present the Software, or any derivative
+    of it, as your own work or under a different name; or
+  - use the Slipfit name, logo, or any confusingly similar mark in
+    connection with such a derivative or redistribution.
+
+All rights not expressly granted are reserved by the copyright holder.
+
+NO WARRANTY
+
+THE SITE AND SOFTWARE ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN
+NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES, OR
+OTHER LIABILITY ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SITE, THE
+SOFTWARE, OR THE USE OR OTHER DEALINGS IN EITHER.
