@@ -1,0 +1,157 @@
+/* ==========================================================================
+   support.html — the support page. Loads after main.css.
+   ========================================================================== */
+
+/* ============================================================== layout === */
+.page {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, var(--main-pad));
+}
+
+/* ================================================================ hero === */
+.hero {
+  padding: var(--s-xl) 0 var(--s-xl)
+}
+
+.hero h1 {
+  font-size: clamp(36px, 5.2vw, 60px);
+  line-height: 1.02
+}
+
+/* Copy on the left, the tip panel on the right — introduced beside the
+   "who is building this" section rather than the hero. */
+.split {
+  display: grid;
+  grid-template-columns: 1fr minmax(300px, 380px);
+  gap: var(--s-xxl);
+  align-items: start;
+}
+
+.split-panel {
+  position: sticky;
+  top: calc(var(--nav-h) + var(--s-l));
+}
+
+.split-panel .kofi-embed {
+  max-width: none;
+  margin: 0;
+}
+
+@media (max-width:900px) {
+  .split {
+    grid-template-columns: 1fr;
+    gap: var(--s-l)
+  }
+
+  .split-panel {
+    position: static
+  }
+
+  .split-panel .kofi-embed {
+    max-width: 480px
+  }
+}
+
+/* ============================================================ sections === */
+section p {
+  max-width: 64ch
+}
+
+/* the rest of .callout is in main.css */
+.callout {
+  grid-template-columns: minmax(150px, auto) 1fr;
+  gap: var(--s-m) var(--s-l)
+}
+
+@media (max-width:640px) {
+  .callout {
+    grid-template-columns: 1fr;
+    gap: 2px var(--s-s)
+  }
+}
+
+/* the rest of .note is in main.css */
+.note p {
+  color: var(--muted-foreground);
+  margin: 0 0 var(--s-s)
+}
+
+/* ============================================================ ko-fi ===== */
+/* The Ko-fi panel is served light; frame it so the bright rectangle reads
+   as an intentional inset rather than a broken element. */
+.kofi-embed {
+  max-width: 480px;
+  margin: var(--s-l) 0 0;
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--primary);
+  background: var(--bg-surface);
+  padding: var(--s-s);
+}
+
+.kofi-embed iframe {
+  display: block
+}
+
+.kofi-note {
+  font-size: 13px;
+  color: var(--muted-foreground);
+  margin: var(--s-s) 0 0
+}
+
+/* ============================================================== goal ===== */
+/* Static progress bar. The only things to change are data-raised and
+   data-target on <section id="goal">; the percentage and fill are derived. */
+#goal {
+  padding: var(--s-l) 0;
+}
+
+#goal .sec-kicker {
+  margin-bottom: var(--s-s);
+}
+
+/* this section's accent is the warned orange, so its marker matches the bar */
+#goal .sec-kicker::before {
+  background: var(--accent);
+}
+
+.goal-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-m);
+  margin-bottom: var(--s-s);
+}
+
+#goal h2 {
+  margin: 0;
+  font-size: clamp(20px, 2.4vw, 28px);
+}
+
+.goal-pct {
+  font-family: var(--font-primary);
+  font-size: clamp(20px, 2.4vw, 28px);
+  line-height: 1;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.goal-track {
+  height: 14px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.goal-fill {
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  transition: width .6s ease;
+}
+
+.goal-cap {
+  font-size: 13px;
+  color: var(--muted-foreground);
+  margin: 6px 0 0;
+}

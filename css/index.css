@@ -1,0 +1,1331 @@
+/* ==========================================================================
+   index.html — the onboarding guide. Loads after main.css.
+   ========================================================================== */
+
+/* ==========================================================================
+KO-fi widget alignment — hug the right edge of the centered content
+column (--shell), not the window edge; fall back to a 16px gutter
+once the viewport is narrower than the column.
+===========================================================================*/
+.floatingchat-container-wrap {
+  left: unset !important;
+  right: max(16px, calc((100vw - var(--shell)) / 2)) !important;
+  width: min(50%, 240px) !important;
+}
+
+.floatingchat-container-wrap-mobi {
+  left: unset !important;
+  right: max(16px, calc((100vw - var(--shell)) / 2)) !important;
+  width: min(50%, 240px) !important;
+}
+
+.floating-chat-kofi-popup-iframe {
+  left: unset !important;
+  right: max(16px, calc((100vw - var(--shell)) / 2)) !important;
+}
+
+.floating-chat-kofi-popup-iframe-mobi {
+  left: unset !important;
+  right: max(16px, calc((100vw - var(--shell)) / 2)) !important;
+}
+
+.floating-chat-kofi-popup-iframe-closer-mobi {
+  left: unset !important;
+  right: max(16px, calc((100vw - var(--shell)) / 2)) !important;
+}
+
+/* ============================================================== navbar === */
+/* The navbar's contents ride the same centered block as the shell below. */
+.topbar-inner {
+  max-width: var(--shell)
+}
+
+.navbtn {
+  display: none
+}
+
+/* ============================================================== layout === */
+.shell {
+  display: flex;
+  align-items: flex-start;
+  max-width: var(--shell);
+  margin: 0 auto
+}
+
+.side {
+  width: var(--side);
+  flex: 0 0 var(--side);
+  position: sticky;
+  top: var(--nav-h);
+  height: calc(100vh - var(--nav-h));
+  overflow-y: auto;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  background: var(--bg-surface);
+  padding: var(--s-l) 0 var(--s-xxl);
+  /* the panel is a visible column now that the shell is centered, so its own
+ scrollbar has to belong to it rather than to the browser */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.side::-webkit-scrollbar {
+  width: 8px
+}
+
+.side::-webkit-scrollbar-track {
+  background: transparent
+}
+
+.side::-webkit-scrollbar-thumb {
+  background: var(--border)
+}
+
+.side::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground)
+}
+
+.main {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0 clamp(16px, 4vw, var(--main-pad))
+}
+
+.wrap {
+  max-width: var(--measure);
+  margin: 0 auto
+}
+
+/* ================================================================= nav === */
+.nav h4 {
+  font-family: var(--font-primary);
+  font-size: 10px;
+  letter-spacing: var(--tracking-section);
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin: var(--s-l) 0 var(--s-s);
+  padding: 0 var(--s-l) 0 20px;
+  position: relative;
+}
+
+.nav h4::before {
+  content: "";
+  position: absolute;
+  left: var(--s-l);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 12px;
+  background: var(--primary);
+}
+
+.nav h4 {
+  padding-left: calc(var(--s-l) + 12px)
+}
+
+.nav a {
+  display: block;
+  padding: 6px var(--s-l) 6px calc(var(--s-l) + 12px);
+  font-size: 14px;
+  color: var(--muted-foreground);
+  border: 0;
+  border-left: 2px solid transparent;
+  transition: color .15s ease, border-color .15s ease;
+}
+
+.nav a:hover {
+  color: var(--foreground);
+  opacity: 1
+}
+
+.nav a.on {
+  color: var(--primary);
+  border-left-color: var(--primary);
+  background: var(--bg-elevated)
+}
+
+/* ================================================================ hero === */
+.hero {
+  padding: var(--s-xxl) 0 var(--s-xl)
+}
+
+.hero h1 {
+  font-size: clamp(38px, 6.4vw, 72px);
+  line-height: 1.0
+}
+
+/* stat row — the brand uses numbers as bragging rights */
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  margin: var(--s-xl) 0 0;
+}
+
+.stats div {
+  flex: 1 1 140px;
+  padding: var(--s-m) var(--s-l);
+  border-right: 1px solid var(--border);
+}
+
+.stats div:last-child {
+  border-right: 0
+}
+
+.stats b {
+  display: block;
+  font-family: var(--font-primary);
+  font-size: 26px;
+  color: var(--primary);
+  line-height: 1.1;
+}
+
+.stats span {
+  display: block;
+  font-family: var(--font-primary);
+  font-size: 10px;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-top: var(--s-xs);
+}
+
+/* ============================================== the resolve panel ======== */
+/* The signature. The product's whole thesis, in the brand's terminal window:
+   the left column never changes, the right column is your printer's answer. */
+.resolve {
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  margin: var(--s-l) 0 0
+}
+
+.resolve-top {
+  display: flex;
+  align-items: center;
+  gap: var(--s-s);
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tl {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: 0 0 auto
+}
+
+.tl.r {
+  background: var(--accent)
+}
+
+.tl.g {
+  background: var(--primary)
+}
+
+.tl.d {
+  background: var(--dark-green)
+}
+
+.resolve-top .lbl {
+  font-family: var(--font-primary);
+  font-size: 10px;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-left: var(--s-s);
+}
+
+select.showing {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: var(--bg-surface);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-none);
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+#showing-note {
+  font-family: var(--font-secondary);
+  font-size: 12px;
+  color: var(--muted-foreground);
+  letter-spacing: 0;
+  text-transform: none
+}
+
+.resolve-body {
+  display: flex;
+  align-items: stretch
+}
+
+.res-col {
+  flex: 1 1 0;
+  padding: var(--s-m) var(--s-l);
+  min-width: 0
+}
+
+.res-col+.res-arrow+.res-col {
+  border-left: 1px solid var(--border)
+}
+
+.res-col h5 {
+  font-family: var(--font-primary);
+  font-size: 10px;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin: 0 0 var(--s-m);
+}
+
+.res-line {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 2;
+  color: var(--foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis
+}
+
+.res-line b {
+  color: var(--foreground);
+  font-weight: 400
+}
+
+.res-arrow {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--s-s);
+  color: var(--muted-foreground);
+  font-family: var(--font-mono)
+}
+
+.out {
+  color: var(--primary);
+  font-weight: 700
+}
+
+.out.flash {
+  animation: flash .45s ease
+}
+
+@keyframes flash {
+  0% {
+    background: rgba(140, 198, 65, .28)
+  }
+
+  100% {
+    background: transparent
+  }
+}
+
+.resolve-foot {
+  border-top: 1px solid var(--border);
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: var(--s-s)
+}
+
+.dot.n {
+  background: var(--muted-foreground)
+}
+
+.dot.m {
+  background: var(--primary)
+}
+
+@media (max-width:720px) {
+  .resolve-body {
+    flex-direction: column
+  }
+
+  .res-col+.res-arrow+.res-col {
+    border-left: 0;
+    border-top: 1px solid var(--border)
+  }
+
+  .res-arrow {
+    transform: rotate(90deg);
+    padding: var(--s-s) 0;
+    justify-content: center
+  }
+}
+
+/* ============================================================ sections === */
+section h4 {
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--foreground);
+  margin: var(--s-l) 0 var(--s-s);
+}
+
+section h3 code,
+section h4 code {
+  font-size: .92em;
+  text-transform: none;
+  letter-spacing: 0
+}
+
+p {
+  margin: 0 0 var(--s-m);
+  max-width: 74ch
+}
+
+.sub {
+  color: var(--muted-foreground);
+  font-size: 18px;
+  max-width: 70ch;
+  margin-bottom: var(--s-l)
+}
+
+ul,
+ol {
+  max-width: 74ch;
+  padding-left: 20px
+}
+
+li {
+  margin-bottom: var(--s-s)
+}
+
+strong {
+  color: var(--accent);
+  font-weight: 700
+}
+
+em {
+  color: var(--foreground)
+}
+
+/* =============================================================== code ==== */
+code {
+  font-family: var(--font-mono);
+  font-size: .9em;
+  background: var(--bg-elevated);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: 1px 5px;
+}
+
+pre {
+  margin: var(--s-m) 0 var(--s-l);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-none);
+  overflow: hidden;
+}
+
+pre code {
+  display: block;
+  background: none;
+  border: 0;
+  padding: var(--s-m) var(--s-l);
+  font-size: 13.5px;
+  line-height: 1.7;
+  overflow-x: auto;
+  white-space: pre;
+  border-radius: 0;
+}
+
+/* a .slip block is a file — labeled like one */
+pre.file::before {
+  content: attr(data-name);
+  display: block;
+  font-family: var(--font-primary);
+  font-size: 10px;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  padding: 8px var(--s-l);
+}
+
+/* a terminal block is a terminal — the brand's window, dots and all */
+pre.term {
+  background: var(--bg-elevated)
+}
+
+pre.term::before {
+  content: attr(data-name);
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--muted-foreground);
+  /* the brand's traffic-light dots, painted rather than typed so each keeps its
+ own color */
+  background:
+    radial-gradient(circle 5px at 24px 50%, var(--accent) 98%, transparent 100%),
+    radial-gradient(circle 5px at 40px 50%, var(--primary) 98%, transparent 100%),
+    radial-gradient(circle 5px at 56px 50%, var(--dark-green) 98%, transparent 100%),
+    var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  padding: 9px var(--s-l) 9px 70px;
+}
+
+pre.term code {
+  color: var(--primary)
+}
+
+/* an output block is what the tool said back */
+pre.msg {
+  background: var(--bg-elevated);
+  border-top: 4px solid var(--muted-foreground)
+}
+
+pre.msg code {
+  color: var(--foreground);
+  font-size: 13px
+}
+
+pre.msg.bad {
+  border-top-color: var(--accent)
+}
+
+pre.msg.good {
+  border-top-color: var(--primary)
+}
+
+/* syntax colors. Three colors only, and each means something:
+   green = a unit literal (the one thing Slipfit adds to Python),
+   orange = a Python keyword, white = a name Slipfit gave you. */
+.t-unit {
+  color: var(--primary);
+  font-weight: 700
+}
+
+.t-name {
+  color: #f0f0f0
+}
+
+.t-kw {
+  color: var(--accent)
+}
+
+.t-com {
+  color: #6b6b6b
+}
+
+.t-str {
+  color: #9a9a9a
+}
+
+.t-num {
+  color: #a8a8a8
+}
+
+/* ============================================================== cards ==== */
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: var(--s-m);
+  margin: var(--s-l) 0
+}
+
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--primary)
+}
+
+.card.warn {
+  border-top-color: var(--accent)
+}
+
+.card-inner {
+  padding: var(--s-m) var(--s-l)
+}
+
+.grid2.install-grid .card-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.btn-dl {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 48px;
+  margin-top: var(--s-l);
+  white-space: nowrap;
+}
+
+.card h4 {
+  margin: 0 0 var(--s-s)
+}
+
+.card p {
+  font-size: 14px;
+  color: var(--muted-foreground);
+  margin: 0
+}
+
+/* the rest of .note is in main.css */
+.note p {
+  max-width: 70ch
+}
+
+.note ul {
+  font-size: 15px
+}
+
+.tag {
+  display: inline-block;
+  font-family: var(--font-primary);
+  font-size: 10px;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-pill);
+  padding: 5px 10px;
+  margin-bottom: var(--s-s);
+}
+
+.note.warn .tag {
+  background: var(--accent);
+  color: var(--foreground);
+  border-color: var(--accent)
+}
+
+/* the plain-english gloss: what a line of code says out loud */
+.gloss {
+  border: 1px solid var(--border);
+  border-left: 0;
+  border-right: 0;
+  margin: 0 0 var(--s-l);
+  padding: var(--s-m) 0;
+}
+
+.gloss dl {
+  display: grid;
+  grid-template-columns: minmax(140px, auto) 1fr;
+  gap: var(--s-s) var(--s-l);
+  margin: 0
+}
+
+.gloss dt {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--primary)
+}
+
+.gloss dd {
+  margin: 0;
+  font-size: 15px;
+  color: var(--foreground)
+}
+
+@media (max-width:640px) {
+  .gloss dl {
+    grid-template-columns: 1fr;
+    gap: 2px var(--s-s)
+  }
+
+  .gloss dd {
+    margin-bottom: var(--s-s)
+  }
+}
+
+/* ============================================================== tables === */
+.tbl {
+  overflow-x: auto;
+  margin: var(--s-m) 0 var(--s-l);
+  border: 1px solid var(--border)
+}
+
+.tbl table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 520px;
+  font-size: 15px
+}
+
+.tbl thead th {
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  background: var(--bg-elevated);
+  text-align: left;
+  padding: 10px var(--s-m);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.tbl td {
+  padding: 10px var(--s-m);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top
+}
+
+.tbl tbody tr:last-child td {
+  border-bottom: 0
+}
+
+.tbl td.num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  white-space: nowrap
+}
+
+.kbd {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: 2px 6px;
+  color: var(--foreground);
+  white-space: nowrap;
+}
+
+/* =============================================================== steps === */
+ol.steps {
+  list-style: none;
+  padding: 0;
+  margin: var(--s-l) 0;
+  counter-reset: step
+}
+
+ol.steps>li {
+  counter-increment: step;
+  position: relative;
+  padding: 0 0 var(--s-l) 56px;
+  margin: 0 0 var(--s-l);
+  border-bottom: 1px solid var(--border);
+}
+
+ol.steps>li:last-child {
+  border-bottom: 0;
+  margin-bottom: 0
+}
+
+ol.steps>li::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: var(--font-primary);
+  font-size: 22px;
+  color: var(--primary);
+  line-height: 1;
+}
+
+ol.steps>li h3 {
+  margin: 0 0 var(--s-s);
+  font-size: 17px
+}
+
+ol.steps>li> :last-child {
+  margin-bottom: 0
+}
+
+/* ========================================================== app mockup === */
+.app {
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  margin: var(--s-l) 0;
+  font-family: var(--font-mono);
+  font-size: 12.5px
+}
+
+.app-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--s-m);
+  flex-wrap: wrap;
+  padding: 10px var(--s-m);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elevated);
+}
+
+.app-bar .m {
+  font-family: var(--font-primary);
+  font-size: 11px;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--primary)
+}
+
+.app .f {
+  color: var(--muted-foreground)
+}
+
+.app-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px
+}
+
+.app-tab {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  font-family: var(--font-mono);
+  color: var(--muted-foreground);
+  border: 1px solid transparent;
+  border-bottom: 2px solid transparent
+}
+
+.app-tab.on {
+  color: var(--foreground);
+  background: var(--bg-surface);
+  border-color: var(--border);
+  border-bottom-color: var(--primary)
+}
+
+.app-tab .dot {
+  color: var(--primary);
+  font-size: 8px
+}
+
+.app .sp {
+  flex: 1 1 auto
+}
+
+.chip {
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  padding: 3px 9px;
+  color: var(--foreground);
+  border-radius: var(--radius-none);
+  white-space: nowrap;
+}
+
+.chip.b {
+  border-color: var(--primary);
+  color: var(--primary)
+}
+
+.app-split {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap
+}
+
+.app-ed {
+  flex: 1 1 300px;
+  padding: var(--s-m);
+  border-right: 1px solid var(--border);
+  line-height: 1.85;
+  min-width: 0;
+  overflow-x: auto
+}
+
+.app-vp {
+  flex: 1 1 220px;
+  min-height: 300px;
+  position: relative;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 23px, rgba(255, 255, 255, .035) 23px 24px),
+    repeating-linear-gradient(90deg, transparent 0 23px, rgba(255, 255, 255, .035) 23px 24px)
+}
+
+.app-vp svg.dia {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%
+}
+
+.app-insp {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  border: 1px solid var(--border);
+  background: var(--background);
+  padding: var(--s-s) var(--s-m);
+  font-size: 11.5px;
+  line-height: 1.7;
+  overflow-x: auto
+}
+
+.app-insp .hd {
+  color: var(--primary)
+}
+
+.app-foot {
+  border-top: 1px solid var(--border);
+  padding: 8px var(--s-m);
+  color: var(--muted-foreground);
+  font-size: 11.5px;
+  overflow-x: auto;
+  white-space: nowrap
+}
+
+.app-trust {
+  display: flex;
+  align-items: center;
+  gap: var(--s-m);
+  flex-wrap: wrap;
+  padding: 12px var(--s-m);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elevated);
+  border-left: 4px solid var(--accent)
+}
+
+.app-trust b {
+  font-family: var(--font-secondary);
+  color: var(--foreground)
+}
+
+/* the rest of .callout is in main.css */
+.callout {
+  grid-template-columns: minmax(110px, auto) 1fr;
+  gap: var(--s-s) var(--s-l)
+}
+
+@media (max-width:640px) {
+  .callout {
+    grid-template-columns: 1fr;
+    gap: 2px var(--s-s)
+  }
+}
+
+/* ========================================================== screenshots == */
+/* A `.shot` holds one picture of the app. Until the picture exists it holds a
+   `.shot-ph` describing what belongs there; swap the div for an <img> and the
+   figure needs no other change. Every `img` on the page opens in the lightbox
+   below — that is wired by tag, so a new picture needs nothing added to it. */
+figure.shot {
+  margin: var(--s-l) 0
+}
+
+figure.shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border)
+}
+
+img {
+  cursor: zoom-in;
+  transition: border-color .15s ease
+}
+
+figure.shot img:hover {
+  border-color: var(--primary)
+}
+
+.shot-ph {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-s);
+  text-align: center;
+  padding: var(--s-xl) var(--s-l);
+  aspect-ratio: 16 / 9;
+  border: 1px dashed var(--border);
+  background:
+    repeating-linear-gradient(135deg, transparent 0 8px, rgba(255, 255, 255, .022) 8px 16px),
+    var(--bg-surface);
+}
+
+.shot-ph b {
+  font-family: var(--font-primary);
+  font-size: 11px;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.shot-ph em {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 13px;
+  color: var(--foreground);
+}
+
+.shot-ph span {
+  font-size: 14px;
+  color: var(--muted-foreground);
+  max-width: 56ch;
+  line-height: 1.5
+}
+
+@media (max-width:640px) {
+  .shot-ph {
+    aspect-ratio: 4 / 3
+  }
+}
+
+/* ========================================================== lightbox ===== */
+/* Clicking any picture opens it at whatever size the window allows. A dialog
+   rather than a hand-rolled overlay: the browser already does the modal, the
+   backdrop, Esc, and putting focus back where it was. */
+dialog.lb {
+  border: 0;
+  padding: 0;
+  max-width: 100vw;
+  max-height: 100vh;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  color: var(--foreground);
+  overflow: hidden;
+}
+
+dialog.lb::backdrop {
+  background: rgba(4, 4, 4, .97)
+}
+
+.lb-frame {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-m);
+  padding: clamp(12px, 3vw, 40px);
+}
+
+.lb-frame img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 140px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  cursor: zoom-out;
+}
+
+.lb-cap {
+  font-size: 14px;
+  color: var(--muted-foreground);
+  text-align: center;
+  max-width: 80ch;
+  line-height: 1.5;
+}
+
+.lb-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-family: var(--font-primary);
+  font-size: 12px;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  background: var(--bg-elevated);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-none);
+  padding: 9px 14px;
+  cursor: pointer;
+}
+
+.lb-close:hover {
+  border-color: var(--primary);
+  color: var(--primary)
+}
+
+/* ============================================================ diagrams === */
+figure {
+  margin: var(--s-l) 0
+}
+
+figure.solo {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  padding: var(--s-l)
+}
+
+.figrow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--s-m);
+  margin: var(--s-l) 0
+}
+
+.figrow figure {
+  margin: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  padding: var(--s-m)
+}
+
+figcaption {
+  font-size: 13px;
+  color: var(--muted-foreground);
+  margin-top: var(--s-s);
+  line-height: 1.5
+}
+
+figcaption b {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  color: var(--primary);
+  font-size: 12.5px
+}
+
+svg.dia {
+  width: 100%;
+  height: auto;
+  display: block
+}
+
+/* a solo diagram is drawn at a fixed scale; stretched to the full measure its
+   labels come out larger than the body text they annotate */
+figure.solo svg.dia {
+  max-width: 540px;
+  margin: 0 auto
+}
+
+svg.dia .fc {
+  fill: var(--primary)
+}
+
+svg.dia .eg {
+  stroke: var(--muted-foreground);
+  stroke-width: 1.4;
+  fill: none
+}
+
+svg.dia .eg.hd {
+  stroke-dasharray: 3 3;
+  opacity: .5
+}
+
+svg.dia .eg.hi {
+  stroke: var(--primary);
+  stroke-width: 2.4
+}
+
+svg.dia .dot {
+  fill: var(--primary)
+}
+
+svg.dia .ax {
+  stroke: var(--muted-foreground);
+  stroke-width: 1.2
+}
+
+svg.dia text {
+  fill: var(--muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 9px
+}
+
+svg.dia text.b {
+  fill: var(--foreground)
+}
+
+/* ============================================================== gauge ==== */
+.gauge {
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  border-top: 4px solid var(--primary);
+  padding: var(--s-l);
+  margin: var(--s-l) 0
+}
+
+.gauge .q {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--foreground);
+  margin: 0 0 var(--s-m)
+}
+
+.stations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-s)
+}
+
+.station {
+  flex: 1 1 88px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-xs);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-none);
+  padding: var(--s-m) var(--s-s);
+  cursor: pointer;
+  color: var(--muted-foreground);
+  transition: border-color .15s ease, color .15s ease;
+}
+
+.station:hover {
+  border-color: var(--muted-foreground);
+  color: var(--foreground)
+}
+
+.station[aria-pressed="true"] {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--background)
+}
+
+.station .notch {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 1px;
+  line-height: 1
+}
+
+.station .mm {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700
+}
+
+.gauge-out {
+  margin-top: var(--s-m);
+  padding-top: var(--s-m);
+  border-top: 1px solid var(--border);
+  font-size: 14px;
+  color: var(--muted-foreground);
+  line-height: 1.6;
+}
+
+.gauge-out b {
+  color: var(--primary)
+}
+
+.gauge-out code {
+  font-size: 12px
+}
+
+/* =========================================================== examples ==== */
+.ex {
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  margin: var(--s-l) 0
+}
+
+.ex-hd {
+  padding: var(--s-m) var(--s-l);
+  border-bottom: 1px solid var(--border)
+}
+
+.ex-hd .n {
+  display: block;
+  font-family: var(--font-primary);
+  font-size: 10px;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: var(--s-s);
+}
+
+.ex-hd h3 {
+  margin: 0 0 var(--s-xs);
+  font-size: 18px
+}
+
+.ex-hd p {
+  font-size: 14px;
+  color: var(--muted-foreground);
+  margin: 0
+}
+
+.ex pre {
+  margin: 0;
+  border: 0;
+  border-radius: 0
+}
+
+.ex-ft {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-m);
+  padding: 10px var(--s-l);
+  border-top: 1px solid var(--border);
+  background: var(--bg-elevated);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+
+.ex-ft .ok {
+  color: var(--primary)
+}
+
+/* ============================================================ responsive = */
+/* the navbar's collapse is in main.css */
+@media (max-width:1000px) {
+  .navbtn {
+    display: inline-block;
+    font-family: var(--font-primary);
+    font-size: 11px;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    background: var(--bg-elevated);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-none);
+    padding: 9px 14px;
+    cursor: pointer;
+  }
+
+  .side {
+    position: fixed;
+    z-index: 39;
+    left: 0;
+    top: var(--nav-h);
+    height: calc(100vh - var(--nav-h));
+    border-left: 0;
+    transform: translateX(-100%);
+    transition: transform .18s ease;
+  }
+
+  .side.open {
+    transform: none;
+    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, .55)
+  }
+
+  .main {
+    padding-left: var(--s-m);
+    padding-right: var(--s-m)
+  }
+}
+
+@media (max-width:520px) {
+  .stats div {
+    flex: 1 1 100%;
+    border-right: 0;
+    border-bottom: 1px solid var(--border)
+  }
+
+  .stats div:last-child {
+    border-bottom: 0
+  }
+
+  ol.steps>li {
+    padding-left: 40px
+  }
+}
